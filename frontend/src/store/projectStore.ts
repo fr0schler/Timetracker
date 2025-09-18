@@ -13,7 +13,7 @@ interface ProjectState {
   setSelectedProject: (project: Project | null) => void;
 }
 
-export const useProjectStore = create<ProjectState>((set, get) => ({
+export const useProjectStore = create<ProjectState>((set) => ({
   projects: [],
   isLoading: false,
   selectedProject: null,

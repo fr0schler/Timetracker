@@ -4,7 +4,7 @@ import { Clock, FolderOpen, TrendingUp, Calendar } from 'lucide-react';
 import Timer from '../components/Timer';
 import { useTimeEntryStore } from '../store/timeEntryStore';
 import { useProjectStore } from '../store/projectStore';
-import { formatDuration, formatDate, getTimeAgo } from '../utils/timeUtils';
+import { formatDuration, getTimeAgo } from '../utils/timeUtils';
 
 export default function DashboardPage() {
   const { timeEntries, fetchTimeEntries } = useTimeEntryStore();

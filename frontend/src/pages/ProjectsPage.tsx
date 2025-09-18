@@ -141,7 +141,7 @@ export default function ProjectsPage() {
 
 interface ProjectFormProps {
   project?: any;
-  onSubmit: (data: CreateProject | UpdateProject) => void;
+  onSubmit: (data: any) => Promise<void>;
   onCancel: () => void;
   isLoading: boolean;
 }
