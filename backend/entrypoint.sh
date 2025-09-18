@@ -2,6 +2,9 @@
 set -e
 
 echo "🔃 Running database migrations..."
+echo "🔍 Debug - DATABASE_URL: $DATABASE_URL"
+echo "🔍 Debug - POSTGRES_USER: $POSTGRES_USER"
+echo "🔍 Debug - POSTGRES_PASSWORD: $POSTGRES_PASSWORD"
 
 # Wait for database to be ready
 until python -c "
