@@ -40,7 +40,7 @@ jobs:
         file: ./frontend/Dockerfile
         platforms: linux/arm64
         push: true
-        tags: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME_FRONTEND }}:main
+        tags: ghcr.io/fr0schler/timetracker-frontend:main
         cache-from: type=gha
         cache-to: type=gha,mode=max
         build-args: |
@@ -75,7 +75,7 @@ jobs:
         file: ./backend/Dockerfile
         platforms: linux/arm64
         push: true
-        tags: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME_BACKEND }}:main
+        tags: ghcr.io/fr0schler/timetracker-backend:main
         cache-from: type=gha
         cache-to: type=gha,mode=max
         build-args: |
@@ -114,8 +114,8 @@ jobs:
           echo ${{ secrets.GITHUB_TOKEN }} | docker login ghcr.io -u ${{ github.actor }} --password-stdin
 
           # Pull latest images (lowercase)
-          docker pull ghcr.io/${{ github.repository_owner }}/timetracker-frontend:main
-          docker pull ghcr.io/${{ github.repository_owner }}/timetracker-backend:main
+          docker pull ghcr.io/fr0schler/timetracker-frontend:main
+          docker pull ghcr.io/fr0schler/timetracker-backend:main
 
           # Copy and configure environment
           if [ ! -f ".env" ]; then
@@ -124,8 +124,8 @@ jobs:
           fi
 
           # Update docker-compose with new images
-          export FRONTEND_IMAGE=ghcr.io/${{ github.repository_owner }}/timetracker-frontend:main
-          export BACKEND_IMAGE=ghcr.io/${{ github.repository_owner }}/timetracker-backend:main
+          export FRONTEND_IMAGE=ghcr.io/fr0schler/timetracker-frontend:main
+          export BACKEND_IMAGE=ghcr.io/fr0schler/timetracker-backend:main
 
           # Stop and recreate containers with new images
           docker compose -f docker-compose.prod.yml down
