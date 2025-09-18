@@ -24,6 +24,7 @@ RUN --mount=type=cache,target=/root/.npm \
 
 # Copy source and build
 COPY . .
+ENV VITE_API_URL=https://timeapi.hkp-solutions.de
 RUN NODE_OPTIONS="--max_old_space_size=4096" npm run build
 
 # Production stage

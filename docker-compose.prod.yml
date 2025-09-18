@@ -36,8 +36,6 @@ services:
     image: ${FRONTEND_IMAGE:-ghcr.io/your-username/timetracker-frontend:main}
     ports:
       - "3000:3000"
-    environment:
-      - VITE_API_URL=https://timeapi.hkp-solutions.de
     depends_on:
       - backend
     restart: unless-stopped
