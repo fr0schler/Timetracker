@@ -20,11 +20,11 @@ COPY package*.json ./
 
 # Install all dependencies (including dev) with cache
 RUN --mount=type=cache,target=/root/.npm \
-    npm ci
+    npm ci --prefer-offline
 
 # Copy source and build
 COPY . .
-RUN npm run build
+RUN NODE_OPTIONS="--max_old_space_size=4096" npm run build
 
 # Production stage
 FROM node:18-alpine AS production
