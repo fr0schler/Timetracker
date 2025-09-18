@@ -41,6 +41,11 @@ class UserService:
         return user
 
     @staticmethod
+    async def get_all_users(db: AsyncSession) -> list[User]:
+        result = await db.execute(select(User))
+        return result.scalars().all()
+
+    @staticmethod
     async def update_user(db: AsyncSession, user_id: int, user_update: UserUpdate) -> Optional[User]:
         db_user = await UserService.get_user(db, user_id)
         if not db_user:
