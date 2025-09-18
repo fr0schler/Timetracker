@@ -117,19 +117,37 @@ jobs:
           docker pull ghcr.io/fr0schler/timetracker-frontend:main
           docker pull ghcr.io/fr0schler/timetracker-backend:main
 
-          # Copy and configure environment
-          if [ ! -f ".env" ]; then
-            cp .env.example .env
-            echo "⚠️ Please configure .env file with production values!"
-          fi
+          # Create production .env file
+          cat > .env << 'EOF'
+          # Database Configuration
+          POSTGRES_DB=timetracker
+          POSTGRES_USER=postgres
+          POSTGRES_PASSWORD=postgres
+
+          # Backend Configuration
+          SECRET_KEY=your-very-secure-secret-key-change-this-in-production
+
+          # Domain Configuration
+          FRONTEND_DOMAIN=timetracker.hkp-solutions.de
+          BACKEND_DOMAIN=timeapi.hkp-solutions.de
+          API_URL=https://timeapi.hkp-solutions.de
+
+          # Docker Images (automatically set by CI/CD)
+          FRONTEND_IMAGE=ghcr.io/fr0schler/timetracker-frontend:main
+          BACKEND_IMAGE=ghcr.io/fr0schler/timetracker-backend:main
+
+          # Deployment Path (for GitHub Actions)
+          DEPLOY_PATH=/root/timetracker
+          EOF
+          echo "✅ Created .env file with production values"
 
           # Update docker-compose with new images
           export FRONTEND_IMAGE=ghcr.io/fr0schler/timetracker-frontend:main
           export BACKEND_IMAGE=ghcr.io/fr0schler/timetracker-backend:main
 
-          # Stop and recreate containers with new images
-          echo "🛑 Stopping containers..."
-          docker compose -f docker-compose.prod.yml down || true
+          # Stop and recreate containers with new images (remove volumes to reset DB)
+          echo "🛑 Stopping containers and removing volumes..."
+          docker compose -f docker-compose.prod.yml down -v || true
 
           echo "🚀 Starting containers..."
           docker compose -f docker-compose.prod.yml up -d
