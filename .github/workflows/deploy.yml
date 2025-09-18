@@ -93,26 +93,37 @@ jobs:
         key: ${{ secrets.PRIVATE_KEY }}
         port: ${{ secrets.PORT }}
         script: |
-          # Navigate to project directory
+          # Create project directory if it doesn't exist
+          sudo mkdir -p ${{ secrets.DEPLOY_PATH }}
           cd ${{ secrets.DEPLOY_PATH }}
 
-          # Pull latest changes
-          git pull origin main
+          # Clone or update repository
+          if [ -d ".git" ]; then
+            git pull origin main
+          else
+            git clone https://github.com/${{ github.repository }}.git .
+          fi
 
           # Login to GitHub Container Registry
           echo ${{ secrets.GITHUB_TOKEN }} | docker login ghcr.io -u ${{ github.actor }} --password-stdin
 
-          # Pull latest images
-          docker pull ${{ env.REGISTRY }}/${{ env.IMAGE_NAME_FRONTEND }}:main
-          docker pull ${{ env.REGISTRY }}/${{ env.IMAGE_NAME_BACKEND }}:main
+          # Pull latest images (lowercase)
+          docker pull ghcr.io/${{ github.repository_owner }}/timetracker-frontend:main
+          docker pull ghcr.io/${{ github.repository_owner }}/timetracker-backend:main
+
+          # Copy and configure environment
+          if [ ! -f ".env" ]; then
+            cp .env.example .env
+            echo "⚠️ Please configure .env file with production values!"
+          fi
 
           # Update docker-compose with new images
-          export FRONTEND_IMAGE=${{ env.REGISTRY }}/${{ env.IMAGE_NAME_FRONTEND }}:main
-          export BACKEND_IMAGE=${{ env.REGISTRY }}/${{ env.IMAGE_NAME_BACKEND }}:main
+          export FRONTEND_IMAGE=ghcr.io/${{ github.repository_owner }}/timetracker-frontend:main
+          export BACKEND_IMAGE=ghcr.io/${{ github.repository_owner }}/timetracker-backend:main
 
           # Stop and recreate containers with new images
-          docker-compose down
-          docker-compose up -d
+          docker compose -f docker-compose.prod.yml down
+          docker compose -f docker-compose.prod.yml up -d
 
           # Clean up old images
           docker image prune -f
