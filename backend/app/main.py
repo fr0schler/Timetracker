@@ -2,7 +2,7 @@ from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from .api.v1 import api_router
 from .core.config import settings
-from .core.database import get_db
+from .core.database import get_db, AsyncSessionLocal
 from .services.user_service import UserService
 from .schemas.user import UserCreate
 import asyncio
@@ -34,22 +34,20 @@ app.include_router(api_router, prefix="/api/v1")
 async def create_default_user():
     """Create default admin user if no users exist"""
     try:
-        db_gen = get_db()
-        db = next(db_gen)
-
-        # Check if any users exist
-        existing_users = await UserService.get_all_users(db)
-        if not existing_users:
-            # Create default admin user
-            default_user = UserCreate(
-                username="admin",
-                email="admin@timetracker.local",
-                password="admin123"
-            )
-            await UserService.create_user(db, default_user)
-            print("✅ Default admin user created: admin / admin123")
-        else:
-            print("ℹ️ Users already exist, skipping default user creation")
+        async with AsyncSessionLocal() as db:
+            # Check if any users exist
+            existing_users = await UserService.get_all_users(db)
+            if not existing_users:
+                # Create default admin user
+                default_user = UserCreate(
+                    username="admin",
+                    email="admin@timetracker.local",
+                    password="admin123"
+                )
+                await UserService.create_user(db, default_user)
+                print("✅ Default admin user created: admin / admin123")
+            else:
+                print("ℹ️ Users already exist, skipping default user creation")
     except Exception as e:
         print(f"⚠️ Failed to create default user: {e}")
 

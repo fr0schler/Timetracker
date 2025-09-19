@@ -31,7 +31,7 @@ frontend/vite.config.js.timestamp-*
 frontend/vite.config.ts.timestamp-*
 
 # Backend Python
-backend/__pycache__/
+backend/**/__pycache__/
 backend/*.py[cod]
 backend/*$py.class
 backend/*.so
