@@ -1,0 +1,339 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project_context>
+    <project_info>
+        <name>TimeTracker SaaS</name>
+        <description>Professional time tracking application with hardware keyboard integration and multi-tenant SaaS architecture</description>
+        <version>2.0</version>
+        <last_updated>2025-01-19</last_updated>
+        <primary_language>TypeScript/Python</primary_language>
+        <deployment>Docker Compose + GitHub Actions CI/CD</deployment>
+    </project_info>
+
+    <architecture>
+        <type>Multi-tenant SaaS with microservices</type>
+        <frontend>
+            <framework>React 18 + Vite</framework>
+            <state_management>Zustand</state_management>
+            <styling>Tailwind CSS</styling>
+            <routing>React Router DOM</routing>
+            <pwa>Service Worker + Manifest</pwa>
+            <build_output>dist/ folder with optimized bundles</build_output>
+        </frontend>
+        <backend>
+            <framework>FastAPI + SQLAlchemy (async)</framework>
+            <database>PostgreSQL with Alembic migrations</database>
+            <authentication>JWT tokens with Bearer auth</authentication>
+            <api_version>v1</api_version>
+            <base_url>/api/v1</base_url>
+        </backend>
+        <infrastructure>
+            <containerization>Docker + docker-compose</containerization>
+            <reverse_proxy>Nginx with CORS handling</reverse_proxy>
+            <database>PostgreSQL 15</database>
+            <environment>Production ready with .env configuration</environment>
+        </infrastructure>
+    </architecture>
+
+    <key_features>
+        <saas_features>
+            <organizations>Multi-tenant architecture with organization-based isolation</organizations>
+            <subscriptions>Stripe integration with Free/Professional/Enterprise tiers</subscriptions>
+            <billing>Stripe customer portal and checkout sessions</billing>
+            <webhooks>Stripe webhook handling for subscription lifecycle</webhooks>
+        </saas_features>
+        <time_tracking>
+            <projects>Project-based time organization with colors and descriptions</projects>
+            <tasks>Hierarchical task management within projects (NEW)</tasks>
+            <timers>Start/stop functionality with mandatory post-completion descriptions</timers>
+            <assignment>Timer completion with task assignment workflow (NEW)</assignment>
+        </time_tracking>
+        <hardware_integration>
+            <keyboard_shortcuts>Global hotkeys for PWA access</keyboard_shortcuts>
+            <hardware_buttons>F13, F14, F15 button support for quick actions</hardware_buttons>
+            <rotary_encoders>Navigation support for hardware interfaces</rotary_encoders>
+            <command_palette>Keyboard-driven navigation with search</command_palette>
+        </hardware_integration>
+        <user_experience>
+            <pwa>Progressive Web App with offline capabilities</pwa>
+            <landing_page>Professional marketing page emphasizing hardware benefits</landing_page>
+            <authentication>Login/Register with organization creation</authentication>
+            <responsive>Mobile-first design with dark mode support</responsive>
+        </user_experience>
+    </key_features>
+
+    <database_schema>
+        <core_models>
+            <users>
+                <fields>id, email, full_name, is_active, keyboard_shortcuts_enabled, organization_id, is_organization_owner</fields>
+                <relationships>belongs_to organization, has_many time_entries</relationships>
+            </users>
+            <organizations>
+                <fields>id, name, subscription_tier, stripe_customer_id, stripe_subscription_id</fields>
+                <relationships>has_many users, has_many projects</relationships>
+                <subscription_tiers>FREE, PROFESSIONAL, ENTERPRISE</subscription_tiers>
+            </organizations>
+            <projects>
+                <fields>id, name, description, color, is_active, organization_id</fields>
+                <relationships>belongs_to organization, has_many tasks, has_many time_entries</relationships>
+            </projects>
+            <tasks>
+                <fields>id, title, description, status, priority, project_id, parent_id, estimated_hours</fields>
+                <relationships>belongs_to project, has_many subtasks (self-referential), has_many time_entries</relationships>
+                <status_values>TODO, IN_PROGRESS, DONE, CANCELLED</status_values>
+                <priority_values>LOW, NORMAL, HIGH, URGENT</priority_values>
+            </tasks>
+            <time_entries>
+                <fields>id, start_time, end_time, description, project_id, task_id, user_id, is_running</fields>
+                <relationships>belongs_to user, belongs_to project, belongs_to task (optional)</relationships>
+            </time_entries>
+        </core_models>
+        <migrations>
+            <latest>003_tasks_and_stripe.py</latest>
+            <status>All migrations applied successfully</status>
+        </migrations>
+    </database_schema>
+
+    <api_endpoints>
+        <authentication>
+            <login>POST /api/v1/auth/login</login>
+            <register>POST /api/v1/auth/register</register>
+            <me>GET /api/v1/auth/me</me>
+        </authentication>
+        <projects>
+            <list>GET /api/v1/projects/</list>
+            <create>POST /api/v1/projects/</create>
+            <detail>GET /api/v1/projects/{id}</detail>
+            <update>PUT /api/v1/projects/{id}</update>
+            <delete>DELETE /api/v1/projects/{id}</delete>
+        </projects>
+        <tasks>
+            <list>GET /api/v1/projects/{project_id}/tasks/</list>
+            <create>POST /api/v1/projects/{project_id}/tasks/</create>
+            <detail>GET /api/v1/projects/{project_id}/tasks/{task_id}</detail>
+            <update>PUT /api/v1/projects/{project_id}/tasks/{task_id}</update>
+            <delete>DELETE /api/v1/projects/{project_id}/tasks/{task_id}</delete>
+        </tasks>
+        <time_entries>
+            <list>GET /api/v1/time-entries/</list>
+            <create>POST /api/v1/time-entries/</create>
+            <active>GET /api/v1/time-entries/active</active>
+            <stop>POST /api/v1/time-entries/{id}/stop</stop>
+            <update>PUT /api/v1/time-entries/{id}</update>
+            <delete>DELETE /api/v1/time-entries/{id}</delete>
+        </time_entries>
+        <subscriptions>
+            <current>GET /api/v1/subscriptions/current</current>
+            <plans>GET /api/v1/subscriptions/plans</plans>
+            <checkout>POST /api/v1/subscriptions/checkout</checkout>
+            <portal>POST /api/v1/subscriptions/portal</portal>
+            <webhook>POST /api/v1/subscriptions/webhook</webhook>
+        </subscriptions>
+    </api_endpoints>
+
+    <stripe_integration>
+        <configuration>
+            <environment_variables>STRIPE_PUBLISHABLE_KEY, STRIPE_SECRET_KEY, STRIPE_WEBHOOK_SECRET</environment_variables>
+            <price_ids>Free: free, Professional: price_professional, Enterprise: price_enterprise</price_ids>
+        </configuration>
+        <pricing>
+            <free>€0/month, 1 user, 3 projects</free>
+            <professional>€12/month, 10 users, unlimited projects</professional>
+            <enterprise>€49/month, unlimited users, custom features</enterprise>
+        </pricing>
+        <features>
+            <checkout_sessions>Redirects to Stripe Checkout with success/cancel URLs</checkout_sessions>
+            <customer_portal>Self-service billing management</customer_portal>
+            <webhooks>Automatic subscription status updates</webhooks>
+        </features>
+    </stripe_integration>
+
+    <recent_development>
+        <last_session_work>
+            <task_management>
+                <description>Implemented complete task management system within projects</description>
+                <workflow>Timers start at project level, post-completion assignment to specific tasks with mandatory descriptions</workflow>
+                <features>Task CRUD operations, status tracking, priority management, hierarchical subtasks, estimated hours</features>
+            </task_management>
+            <typescript_fixes>
+                <description>Fixed all TypeScript build errors for successful CI/CD deployment</description>
+                <issues_resolved>Interface mismatches, type declarations, unused imports, API endpoint consistency</issues_resolved>
+            </typescript_fixes>
+            <integration>
+                <description>Connected timer completion workflow with task assignment dialog</description>
+                <components>TimerDescriptionDialog, ProjectDetail, TaskStore, API services</components>
+            </integration>
+        </last_session_work>
+        <current_status>
+            <build_status>✅ Frontend builds successfully without TypeScript errors</build_status>
+            <features_status>✅ Task management fully implemented and integrated</features_status>
+            <deployment_status>✅ Ready for Docker deployment in CI/CD pipeline</deployment_status>
+        </current_status>
+    </recent_development>
+
+    <directory_structure>
+        <backend>
+            <path>backend/</path>
+            <key_files>
+                <main>app/main.py - FastAPI application entry point</main>
+                <database>app/core/database.py - Async SQLAlchemy configuration</database>
+                <models>app/models/ - SQLAlchemy models (user.py, project.py, task.py, time_entry.py, organization.py)</models>
+                <schemas>app/schemas/ - Pydantic request/response models</schemas>
+                <services>app/services/ - Business logic (stripe_service.py, task_service.py, project_service.py)</services>
+                <api>app/api/v1/endpoints/ - API route handlers</api>
+                <migrations>alembic/versions/ - Database migration files</migrations>
+            </key_files>
+        </backend>
+        <frontend>
+            <path>frontend/</path>
+            <key_files>
+                <main>src/App.tsx - Main React application with routing</main>
+                <pages>src/pages/ - Page components (DashboardPage, ProjectsPage, TimeEntriesPage, LandingPage)</pages>
+                <components>src/components/ - Reusable components (TimerDescriptionDialog, ProjectDetail, SubscriptionManager, CommandPalette)</components>
+                <stores>src/store/ - Zustand state management (authStore, projectStore, taskStore, timeEntryStore)</stores>
+                <services>src/services/api.ts - Axios HTTP client with authentication</services>
+                <hooks>src/hooks/ - Custom React hooks (useKeyboardShortcuts, useTimer)</hooks>
+                <types>src/types/index.ts - TypeScript interface definitions</types>
+            </key_files>
+        </frontend>
+        <infrastructure>
+            <docker>docker-compose.yml, docker-compose.prod.yml - Container orchestration</docker>
+            <nginx>nginx/ - Reverse proxy configuration with CORS</nginx>
+            <github>github/workflows/ - CI/CD pipeline definitions</github>
+        </infrastructure>
+    </directory_structure>
+
+    <deployment>
+        <development>
+            <command>docker-compose up --build</command>
+            <urls>
+                <frontend>http://localhost:3000</frontend>
+                <backend>http://localhost:8000</backend>
+                <api_docs>http://localhost:8000/docs</api_docs>
+            </urls>
+        </development>
+        <production>
+            <command>docker-compose -f docker-compose.prod.yml up --build</command>
+            <github_actions>Automated build and deployment on push to main branch</github_actions>
+            <registry>ghcr.io/fr0schler/timetracker-*</registry>
+        </production>
+        <environment_variables>
+            <required>DATABASE_URL, SECRET_KEY, STRIPE_PUBLISHABLE_KEY, STRIPE_SECRET_KEY</required>
+            <optional>STRIPE_WEBHOOK_SECRET, DEBUG, CORS_ORIGINS</optional>
+        </environment_variables>
+    </deployment>
+
+    <known_issues>
+        <resolved>
+            <typescript_errors>All TypeScript build errors fixed in latest commit</typescript_errors>
+            <cors_issues>Nginx CORS configuration properly isolated from FastAPI</cors_issues>
+            <database_migrations>All migrations applied successfully</database_migrations>
+            <api_inconsistencies>Task API endpoints now consistent with project-based structure</api_inconsistencies>
+        </resolved>
+        <monitoring>
+            <github_actions>Monitor CI/CD pipeline for any deployment issues</github_actions>
+            <stripe_webhooks>Test webhook handling in production environment</stripe_webhooks>
+            <database_performance>Monitor query performance with growing task/time entry data</database_performance>
+        </monitoring>
+    </known_issues>
+
+    <user_workflow>
+        <registration>
+            <step1>User visits landing page highlighting hardware integration benefits</step1>
+            <step2>Registration creates both user account and organization</step2>
+            <step3>User becomes organization owner with billing management rights</step3>
+        </registration>
+        <time_tracking>
+            <step1>Create projects with names, descriptions, and color coding</step1>
+            <step2>Define tasks within projects (optional but recommended)</step2>
+            <step3>Start timer at project level using UI, keyboard shortcuts, or hardware buttons</step3>
+            <step4>Stop timer triggers mandatory description dialog</step4>
+            <step5>Assign completed time to specific task (optional) with description (required)</step5>
+            <step6>Time entry saved with project, task, and description metadata</step6>
+        </time_tracking>
+        <hardware_usage>
+            <keyboard_shortcuts>Global hotkeys work even when app not focused (PWA)</keyboard_shortcuts>
+            <hardware_buttons>F13/F14/F15 mapped to start/stop/switch functions</hardware_buttons>
+            <command_palette>Ctrl+K opens search interface for quick navigation</command_palette>
+            <rotary_encoders>Arrow key simulation for project switching</rotary_encoders>
+        </hardware_usage>
+        <subscription_management>
+            <upgrade>Organization owners can upgrade through Stripe Checkout</upgrade>
+            <billing>Self-service billing portal for invoice management</billing>
+            <limits>Free: 1 user, 3 projects; Pro: 10 users, unlimited projects; Enterprise: unlimited everything</limits>
+        </subscription_management>
+    </user_workflow>
+
+    <technical_notes>
+        <state_management>
+            <pattern>Zustand stores with async actions and error handling</pattern>
+            <persistence>Authentication tokens in localStorage</persistence>
+            <reactivity>Automatic UI updates on state changes</reactivity>
+        </state_management>
+        <api_communication>
+            <authentication>Automatic Bearer token injection via Axios interceptors</authentication>
+            <error_handling>401 responses trigger automatic logout and redirect</error_handling>
+            <cors>Handled exclusively by FastAPI, not Nginx</cors>
+        </api_communication>
+        <database_patterns>
+            <multi_tenancy>Organization-based data isolation</multi_tenancy>
+            <async_operations>All database operations use async/await pattern</async_operations>
+            <relationships>SQLAlchemy relationships with proper foreign keys</relationships>
+        </database_patterns>
+        <security>
+            <authentication>JWT tokens with expiration</authentication>
+            <authorization>Organization-based access control</authorization>
+            <cors>Properly configured for cross-origin requests</cors>
+            <env_variables>Sensitive data in environment variables</env_variables>
+        </security>
+    </technical_notes>
+
+    <development_context>
+        <user_requirements>
+            <german_language>User communicated primarily in German</german_language>
+            <hardware_focus>Strong emphasis on hardware keyboard integration for efficiency</hardware_focus>
+            <saas_transformation>Convert existing time tracker into professional SaaS product</saas_transformation>
+            <task_management>Specific request for project-based task organization with post-timer assignment</task_management>
+            <stripe_integration>Explicit request for Stripe subscription system</stripe_integration>
+        </user_requirements>
+        <development_philosophy>
+            <efficiency_first>Hardware integration for maximum user efficiency</efficiency_first>
+            <professional_grade>Enterprise-ready SaaS architecture</professional_grade>
+            <user_experience>Smooth workflows with minimal friction</user_experience>
+            <flexibility>Support for different working styles and hardware setups</flexibility>
+        </development_philosophy>
+        <next_potential_features>
+            <team_management>Invite team members to organizations</team_management>
+            <reporting>Advanced analytics and time tracking reports</reporting>
+            <integrations>Third-party tool integrations (Slack, GitHub, etc.)</integrations>
+            <custom_hardware>Support for custom hardware configurations</custom_hardware>
+            <mobile_app>Native mobile applications</mobile_app>
+        </next_potential_features>
+    </development_context>
+
+    <troubleshooting>
+        <common_issues>
+            <build_failures>
+                <cause>TypeScript errors or missing dependencies</cause>
+                <solution>Run npm install in frontend/, check TypeScript types</solution>
+            </build_failures>
+            <cors_errors>
+                <cause>Duplicate CORS headers from Nginx and FastAPI</cause>
+                <solution>Ensure only FastAPI handles CORS, not Nginx</solution>
+            </cors_errors>
+            <database_connection>
+                <cause>Database not accessible or credentials incorrect</cause>
+                <solution>Check DATABASE_URL, ensure PostgreSQL is running</solution>
+            </database_connection>
+            <stripe_issues>
+                <cause>Missing or incorrect Stripe environment variables</cause>
+                <solution>Verify STRIPE_PUBLISHABLE_KEY and STRIPE_SECRET_KEY</solution>
+            </stripe_issues>
+        </common_issues>
+        <debugging_tools>
+            <frontend>Browser DevTools, React DevTools, Vite dev server logs</frontend>
+            <backend>FastAPI automatic docs at /docs, SQLAlchemy query logging</backend>
+            <database>psql command line, pgAdmin for GUI management</database>
+            <containers>docker-compose logs, docker exec for container access</containers>
+        </debugging_tools>
+    </troubleshooting>
+</project_context>
