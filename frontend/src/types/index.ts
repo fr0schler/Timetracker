@@ -3,6 +3,7 @@ export interface User {
   email: string;
   full_name?: string;
   is_active: boolean;
+  keyboard_shortcuts_enabled?: boolean;
   created_at: string;
 }
 
@@ -105,10 +106,12 @@ export interface UpdateTask {
 
 // Subscription-related types
 export interface Subscription {
-  id: string;
-  status: 'active' | 'inactive' | 'cancelled' | 'past_due';
-  current_period_end: string;
+  id: string | null;
+  status: string;
+  tier: string;
+  current_period_end: string | null;
   cancel_at_period_end: boolean;
+  is_active: boolean;
   plan: SubscriptionPlan;
 }
 
@@ -117,8 +120,10 @@ export interface SubscriptionPlan {
   name: string;
   price: number;
   currency: string;
-  interval: 'month' | 'year';
+  interval: string;
   features: string[];
+  max_users: number;
+  max_projects: number;
 }
 
 export interface ApiError {

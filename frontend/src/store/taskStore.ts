@@ -6,13 +6,14 @@ interface TaskState {
   tasks: Task[];
   isLoading: boolean;
   error: string | null;
+  currentProjectId: number | null;
 
   // Actions
   fetchTasksByProject: (projectId: number) => Promise<void>;
-  createTask: (data: CreateTask) => Promise<void>;
-  updateTask: (id: number, data: UpdateTask) => Promise<void>;
-  deleteTask: (id: number) => Promise<void>;
-  toggleTaskStatus: (id: number) => Promise<void>;
+  createTask: (projectId: number, data: CreateTask) => Promise<void>;
+  updateTask: (projectId: number, id: number, data: UpdateTask) => Promise<void>;
+  deleteTask: (projectId: number, id: number) => Promise<void>;
+  toggleTaskStatus: (projectId: number, id: number) => Promise<void>;
   clearError: () => void;
 }
 
@@ -20,9 +21,10 @@ export const useTaskStore = create<TaskState>((set, get) => ({
   tasks: [],
   isLoading: false,
   error: null,
+  currentProjectId: null,
 
   fetchTasksByProject: async (projectId: number) => {
-    set({ isLoading: true, error: null });
+    set({ isLoading: true, error: null, currentProjectId: projectId });
     try {
       const tasks = await tasksApi.getByProject(projectId);
       set({ tasks, isLoading: false });
@@ -34,10 +36,10 @@ export const useTaskStore = create<TaskState>((set, get) => ({
     }
   },
 
-  createTask: async (data: CreateTask) => {
+  createTask: async (projectId: number, data: CreateTask) => {
     set({ isLoading: true, error: null });
     try {
-      const newTask = await tasksApi.create(data);
+      const newTask = await tasksApi.create(projectId, data);
       set((state) => ({
         tasks: [...state.tasks, newTask],
         isLoading: false
@@ -51,10 +53,10 @@ export const useTaskStore = create<TaskState>((set, get) => ({
     }
   },
 
-  updateTask: async (id: number, data: UpdateTask) => {
+  updateTask: async (projectId: number, id: number, data: UpdateTask) => {
     set({ isLoading: true, error: null });
     try {
-      const updatedTask = await tasksApi.update(id, data);
+      const updatedTask = await tasksApi.update(projectId, id, data);
       set((state) => ({
         tasks: state.tasks.map(task => task.id === id ? updatedTask : task),
         isLoading: false
@@ -68,10 +70,10 @@ export const useTaskStore = create<TaskState>((set, get) => ({
     }
   },
 
-  deleteTask: async (id: number) => {
+  deleteTask: async (projectId: number, id: number) => {
     set({ isLoading: true, error: null });
     try {
-      await tasksApi.delete(id);
+      await tasksApi.delete(projectId, id);
       set((state) => ({
         tasks: state.tasks.filter(task => task.id !== id),
         isLoading: false
@@ -85,12 +87,12 @@ export const useTaskStore = create<TaskState>((set, get) => ({
     }
   },
 
-  toggleTaskStatus: async (id: number) => {
+  toggleTaskStatus: async (projectId: number, id: number) => {
     const task = get().tasks.find(t => t.id === id);
     if (!task) return;
 
     const newStatus = task.status === 'done' ? 'todo' : 'done';
-    await get().updateTask(id, { status: newStatus });
+    await get().updateTask(projectId, id, { status: newStatus });
   },
 
   clearError: () => {

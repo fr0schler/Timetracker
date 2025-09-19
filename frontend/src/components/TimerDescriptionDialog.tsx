@@ -1,22 +1,19 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { Clock, Check, X, Tag, FileText, Timer } from 'lucide-react';
-import { TimeEntry, Task } from '../types';
+import { TimeEntry } from '../types';
 import { useProjectStore } from '../store/projectStore';
 import { useTaskStore } from '../store/taskStore';
-import { useTimeEntryStore } from '../store/timeEntryStore';
 
 interface TimerDescriptionDialogProps {
   timeEntry: TimeEntry;
-  isOpen: boolean;
-  onClose: () => void;
   onSave: (description: string, taskId?: number) => void;
+  onCancel: () => void;
 }
 
 export default function TimerDescriptionDialog({
   timeEntry,
-  isOpen,
-  onClose,
-  onSave
+  onSave,
+  onCancel
 }: TimerDescriptionDialogProps) {
   const [description, setDescription] = useState(timeEntry.description || '');
   const [selectedTaskId, setSelectedTaskId] = useState<number | undefined>(timeEntry.task_id || undefined);
@@ -31,18 +28,18 @@ export default function TimerDescriptionDialog({
 
   // Fetch tasks for the project
   useEffect(() => {
-    if (project?.id && isOpen) {
+    if (project?.id) {
       fetchTasksByProject(project.id);
     }
-  }, [project?.id, isOpen, fetchTasksByProject]);
+  }, [project?.id, fetchTasksByProject]);
 
   // Focus textarea when dialog opens
   useEffect(() => {
-    if (isOpen && textareaRef.current) {
+    if (textareaRef.current) {
       textareaRef.current.focus();
       textareaRef.current.select();
     }
-  }, [isOpen]);
+  }, []);
 
   // Calculate duration for display
   const duration = timeEntry.end_time
@@ -72,7 +69,6 @@ export default function TimerDescriptionDialog({
     setIsLoading(true);
     try {
       await onSave(description.trim(), selectedTaskId);
-      onClose();
     } catch (error) {
       console.error('Failed to save time entry:', error);
     } finally {
@@ -86,11 +82,9 @@ export default function TimerDescriptionDialog({
       handleSave();
     } else if (e.key === 'Escape') {
       e.preventDefault();
-      onClose();
+      onCancel();
     }
   };
-
-  if (!isOpen) return null;
 
   return (
     <div className="fixed inset-0 z-50 bg-black bg-opacity-50 flex items-center justify-center p-4">
@@ -112,7 +106,7 @@ export default function TimerDescriptionDialog({
               </div>
             </div>
             <button
-              onClick={onClose}
+              onClick={onCancel}
               className="text-gray-400 hover:text-gray-600 dark:hover:text-gray-300"
             >
               <X className="h-5 w-5" />
@@ -192,7 +186,7 @@ export default function TimerDescriptionDialog({
         {/* Footer */}
         <div className="p-6 border-t border-gray-200 dark:border-gray-700 flex items-center justify-end space-x-3">
           <button
-            onClick={onClose}
+            onClick={onCancel}
             disabled={isLoading}
             className="px-4 py-2 text-sm font-medium text-gray-700 dark:text-gray-300 bg-white dark:bg-gray-700 border border-gray-300 dark:border-gray-600 rounded-md hover:bg-gray-50 dark:hover:bg-gray-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary-500 disabled:opacity-50"
           >

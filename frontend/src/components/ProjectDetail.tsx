@@ -6,9 +6,7 @@ import {
   Trash2,
   CheckSquare,
   Square,
-  Clock,
-  Users,
-  Calendar
+  Clock
 } from 'lucide-react';
 import { Project, Task, CreateTask, UpdateTask } from '../types';
 import { tasksApi } from '../services/api';
@@ -284,7 +282,7 @@ export default function ProjectDetail({ project, onBack }: ProjectDetailProps) {
 
 interface TaskFormProps {
   task?: Task;
-  onSubmit: (data: CreateTask | UpdateTask) => Promise<void>;
+  onSubmit: (data: any) => Promise<void>;
   onCancel: () => void;
 }
 

@@ -92,7 +92,7 @@ export default function CommandPalette() {
         startTimer(project.id);
         setIsOpen(false);
       },
-      keywords: ['project', 'switch', project.name.toLowerCase(), project.client_name?.toLowerCase() || '']
+      keywords: ['project', 'switch', project.name.toLowerCase()]
     })),
 
     // Account actions

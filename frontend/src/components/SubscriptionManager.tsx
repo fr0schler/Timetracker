@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import {
   CreditCard,
   Crown,
@@ -82,8 +82,8 @@ export default function SubscriptionManager() {
     }).format(price / 100);
   };
 
-  const formatDate = (timestamp: number) => {
-    return new Date(timestamp * 1000).toLocaleDateString('de-DE');
+  const formatDate = (dateString: string) => {
+    return new Date(dateString).toLocaleDateString('de-DE');
   };
 
   if (isLoading && !subscription && !plans.length) {
@@ -124,7 +124,7 @@ export default function SubscriptionManager() {
                 <span className="text-sm font-medium text-gray-600 dark:text-gray-400">Plan</span>
               </div>
               <span className="text-lg font-semibold text-gray-900 dark:text-white capitalize">
-                {subscription.plan.name}
+                {subscription.tier}
               </span>
             </div>
 
@@ -190,7 +190,7 @@ export default function SubscriptionManager() {
 
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
           {plans.map((plan) => {
-            const isCurrentPlan = subscription?.plan.id === plan.id;
+            const isCurrentPlan = subscription?.tier === plan.id;
             const isFree = plan.id === 'free';
             const isPopular = plan.id === 'professional';
 
