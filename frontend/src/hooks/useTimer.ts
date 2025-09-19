@@ -5,7 +5,7 @@ export const useTimer = (startTime: string | null, isRunning: boolean) => {
   const [currentDuration, setCurrentDuration] = useState(0);
 
   useEffect(() => {
-    let interval: NodeJS.Timeout;
+    let interval: ReturnType<typeof setInterval>;
 
     if (isRunning && startTime) {
       // Update immediately
