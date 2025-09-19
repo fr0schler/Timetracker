@@ -64,7 +64,7 @@ export const authApi = {
 // Projects API
 export const projectsApi = {
   getAll: async (): Promise<Project[]> => {
-    const response: AxiosResponse<Project[]> = await api.get('/projects');
+    const response: AxiosResponse<Project[]> = await api.get('/projects/');
     return response.data;
   },
 
@@ -74,7 +74,7 @@ export const projectsApi = {
   },
 
   create: async (data: CreateProject): Promise<Project> => {
-    const response: AxiosResponse<Project> = await api.post('/projects', data);
+    const response: AxiosResponse<Project> = await api.post('/projects/', data);
     return response.data;
   },
 
@@ -91,7 +91,7 @@ export const projectsApi = {
 // Time Entries API
 export const timeEntriesApi = {
   getAll: async (): Promise<TimeEntry[]> => {
-    const response: AxiosResponse<TimeEntry[]> = await api.get('/time-entries');
+    const response: AxiosResponse<TimeEntry[]> = await api.get('/time-entries/');
     return response.data;
   },
 
@@ -106,7 +106,7 @@ export const timeEntriesApi = {
   },
 
   create: async (data: CreateTimeEntry): Promise<TimeEntry> => {
-    const response: AxiosResponse<TimeEntry> = await api.post('/time-entries', data);
+    const response: AxiosResponse<TimeEntry> = await api.post('/time-entries/', data);
     return response.data;
   },
 
