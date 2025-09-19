@@ -6,17 +6,20 @@ interface ProjectState {
   projects: Project[];
   isLoading: boolean;
   selectedProject: Project | null;
+  currentProject: Project | null; // For keyboard shortcuts compatibility
   fetchProjects: () => Promise<void>;
   createProject: (data: CreateProject) => Promise<void>;
   updateProject: (id: number, data: UpdateProject) => Promise<void>;
   deleteProject: (id: number) => Promise<void>;
   setSelectedProject: (project: Project | null) => void;
+  setCurrentProject: (project: Project | null) => void; // Alias for compatibility
 }
 
 export const useProjectStore = create<ProjectState>((set) => ({
   projects: [],
   isLoading: false,
   selectedProject: null,
+  currentProject: null,
 
   fetchProjects: async () => {
     set({ isLoading: true });
@@ -76,6 +79,10 @@ export const useProjectStore = create<ProjectState>((set) => ({
   },
 
   setSelectedProject: (project: Project | null) => {
-    set({ selectedProject: project });
+    set({ selectedProject: project, currentProject: project });
+  },
+
+  setCurrentProject: (project: Project | null) => {
+    set({ currentProject: project, selectedProject: project });
   },
 }));

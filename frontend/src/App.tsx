@@ -1,6 +1,9 @@
 import { useEffect } from 'react';
-import { Routes, Route, Navigate } from 'react-router-dom';
+import { Routes, Route, Navigate, useLocation } from 'react-router-dom';
 import { useAuthStore } from './store/authStore';
+import { useTimeEntryStore } from './store/timeEntryStore';
+import { useKeyboardShortcuts } from './hooks/useKeyboardShortcuts';
+import LandingPage from './pages/LandingPage';
 import LoginPage from './pages/LoginPage';
 import RegisterPage from './pages/RegisterPage';
 import DashboardPage from './pages/DashboardPage';
@@ -8,13 +11,33 @@ import ProjectsPage from './pages/ProjectsPage';
 import TimeEntriesPage from './pages/TimeEntriesPage';
 import Layout from './components/Layout';
 import ProtectedRoute from './components/ProtectedRoute';
+import CommandPalette from './components/CommandPalette';
+import TimerDescriptionDialog from './components/TimerDescriptionDialog';
 
 function App() {
   const { loadUser, isAuthenticated, isLoading } = useAuthStore();
+  const { pendingTimeEntry, completePendingTimeEntry, clearPendingTimeEntry } = useTimeEntryStore();
+  const location = useLocation();
+
+  // Initialize keyboard shortcuts
+  useKeyboardShortcuts();
 
   useEffect(() => {
     loadUser();
   }, [loadUser]);
+
+  // Register service worker for PWA functionality
+  useEffect(() => {
+    if ('serviceWorker' in navigator) {
+      navigator.serviceWorker.register('/sw.js')
+        .then(registration => {
+          console.log('SW registered: ', registration);
+        })
+        .catch(registrationError => {
+          console.log('SW registration failed: ', registrationError);
+        });
+    }
+  }, []);
 
   if (isLoading) {
     return (
@@ -24,27 +47,72 @@ function App() {
     );
   }
 
+  // Show landing page for non-authenticated users on root path
+  const showLandingPage = !isAuthenticated && location.pathname === '/';
+
   return (
-    <Routes>
-      <Route path="/login" element={<LoginPage />} />
-      <Route path="/register" element={<RegisterPage />} />
-      <Route
-        path="/"
-        element={
-          <ProtectedRoute>
-            <Layout />
-          </ProtectedRoute>
-        }
-      >
-        <Route index element={<DashboardPage />} />
-        <Route path="projects" element={<ProjectsPage />} />
-        <Route path="time-entries" element={<TimeEntriesPage />} />
-      </Route>
-      <Route
-        path="*"
-        element={<Navigate to={isAuthenticated ? "/" : "/login"} replace />}
-      />
-    </Routes>
+    <>
+      <Routes>
+        {/* Public Routes */}
+        <Route path="/" element={showLandingPage ? <LandingPage /> : <Navigate to="/dashboard" replace />} />
+        <Route path="/login" element={<LoginPage />} />
+        <Route path="/register" element={<RegisterPage />} />
+
+        {/* Protected Routes */}
+        <Route
+          path="/dashboard"
+          element={
+            <ProtectedRoute>
+              <Layout />
+            </ProtectedRoute>
+          }
+        >
+          <Route index element={<DashboardPage />} />
+        </Route>
+
+        <Route
+          path="/projects"
+          element={
+            <ProtectedRoute>
+              <Layout />
+            </ProtectedRoute>
+          }
+        >
+          <Route index element={<ProjectsPage />} />
+        </Route>
+
+        <Route
+          path="/time-entries"
+          element={
+            <ProtectedRoute>
+              <Layout />
+            </ProtectedRoute>
+          }
+        >
+          <Route index element={<TimeEntriesPage />} />
+        </Route>
+
+        {/* Catch all route */}
+        <Route
+          path="*"
+          element={<Navigate to={isAuthenticated ? "/dashboard" : "/"} replace />}
+        />
+      </Routes>
+
+      {/* Global Components */}
+      {isAuthenticated && <CommandPalette />}
+
+      {/* Timer Description Dialog */}
+      {pendingTimeEntry && (
+        <TimerDescriptionDialog
+          timeEntry={pendingTimeEntry}
+          onSave={(description, taskId) => {
+            completePendingTimeEntry(description, taskId);
+          }}
+          onCancel={clearPendingTimeEntry}
+        />
+      )}
+    </>
   );
 }
 
