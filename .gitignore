@@ -30,6 +30,15 @@ frontend/.nyc_output/
 frontend/vite.config.js.timestamp-*
 frontend/vite.config.ts.timestamp-*
 
+# Puppeteer test files
+frontend/screenshots/
+frontend/test-screenshots/
+frontend/*test*.js
+frontend/*test*.json
+frontend/*test*.html
+frontend/*test*.md
+frontend/comprehensive-test-report.*
+
 # Backend Python
 backend/**/__pycache__/
 backend/*.py[cod]
