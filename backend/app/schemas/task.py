@@ -9,7 +9,6 @@ class TaskBase(BaseModel):
     description: Optional[str] = None
     status: TaskStatus = TaskStatus.TODO
     priority: TaskPriority = TaskPriority.NORMAL
-    estimated_hours: Optional[float] = None
     parent_id: Optional[int] = None
 
 
@@ -22,7 +21,6 @@ class TaskUpdate(BaseModel):
     description: Optional[str] = None
     status: Optional[TaskStatus] = None
     priority: Optional[TaskPriority] = None
-    estimated_hours: Optional[float] = None
     parent_id: Optional[int] = None
 
 

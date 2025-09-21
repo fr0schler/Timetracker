@@ -38,7 +38,17 @@ class TaskService:
     @staticmethod
     async def create_task(db: AsyncSession, task: TaskCreate) -> TaskModel:
         """Create a new task"""
-        db_task = TaskModel(**task.model_dump())
+        # Filter out fields that don't exist in the model
+        task_data = task.model_dump(exclude_unset=True)
+
+        # Map parent_id to parent_task_id if provided
+        if 'parent_id' in task_data:
+            task_data['parent_task_id'] = task_data.pop('parent_id')
+
+        # Get current user from the request context (we'll need to get this from elsewhere)
+        # For now, we'll leave created_by_id and organization_id as required by the caller
+
+        db_task = TaskModel(**task_data)
         db.add(db_task)
         await db.commit()
         await db.refresh(db_task)

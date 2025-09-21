@@ -107,9 +107,27 @@ async def create_project_task(
     if not project:
         raise HTTPException(status_code=404, detail="Project not found")
 
-    # Set the project_id on the task
+    # Set the required fields on the task
     task.project_id = project_id
-    return await TaskService.create_task(db=db, task=task)
+
+    # Create task with required fields
+    task_data = task.model_dump(exclude_unset=True)
+    task_data['project_id'] = project_id
+    task_data['organization_id'] = project.organization_id
+    task_data['created_by_id'] = current_user.id
+
+    # Map parent_id to parent_task_id if provided
+    if 'parent_id' in task_data:
+        task_data['parent_task_id'] = task_data.pop('parent_id')
+
+    # Create task directly with TaskModel
+    from ..models.task import Task as TaskModel
+    db_task = TaskModel(**task_data)
+    db.add(db_task)
+    await db.commit()
+    await db.refresh(db_task)
+
+    return db_task
 
 
 @router.get("/{project_id}/tasks/{task_id}", response_model=Task)
