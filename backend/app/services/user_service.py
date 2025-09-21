@@ -43,7 +43,7 @@ class UserService:
     @staticmethod
     async def get_all_users(db: AsyncSession) -> list[User]:
         result = await db.execute(select(User))
-        return result.scalars().all()
+        return list(result.scalars().all())
 
     @staticmethod
     async def update_user(db: AsyncSession, user_id: int, user_update: UserUpdate) -> Optional[User]:
