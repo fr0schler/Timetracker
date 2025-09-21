@@ -12,6 +12,7 @@ import ProjectsPage from './pages/ProjectsPage';
 import TimeEntriesPage from './pages/TimeEntriesPage';
 import TasksPage from './pages/TasksPage';
 import TaskTemplatesPage from './pages/TaskTemplatesPage';
+import TeamManagementPage from './pages/TeamManagementPage';
 import UserProfilePage from './pages/UserProfilePage';
 import SettingsPage from './pages/SettingsPage';
 import Layout from './components/Layout';
@@ -130,6 +131,17 @@ function App() {
           }
         >
           <Route index element={<TaskTemplatesPage />} />
+        </Route>
+
+        <Route
+          path="/team"
+          element={
+            <ProtectedRoute>
+              <Layout />
+            </ProtectedRoute>
+          }
+        >
+          <Route index element={<TeamManagementPage />} />
         </Route>
 
         <Route

@@ -186,6 +186,25 @@ export interface TaskActivity {
   created_at: string;
 }
 
+// Team Management types
+export type UserRole = 'owner' | 'admin' | 'member' | 'viewer';
+
+export interface UserInvitation {
+  id: number;
+  email: string;
+  role: UserRole;
+  token: string;
+  invited_by_id: number;
+  invited_at: string;
+  expires_at: string;
+  status: 'pending' | 'accepted' | 'expired' | 'cancelled';
+}
+
+export interface CreateInvitation {
+  email: string;
+  role: UserRole;
+}
+
 // Subscription-related types
 export interface Subscription {
   id: string | null;

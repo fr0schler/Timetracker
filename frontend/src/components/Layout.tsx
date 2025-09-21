@@ -1,5 +1,5 @@
 import { Outlet, Link, useLocation } from 'react-router-dom';
-import { Clock, FolderOpen, List, CheckSquare, FileText, LogOut, User, Settings } from 'lucide-react';
+import { Clock, FolderOpen, List, CheckSquare, FileText, Users, LogOut, User, Settings } from 'lucide-react';
 import { useAuthStore } from '../store/authStore';
 
 export default function Layout() {
@@ -11,6 +11,7 @@ export default function Layout() {
     { name: 'Projects', href: '/projects', icon: FolderOpen },
     { name: 'Tasks', href: '/tasks', icon: CheckSquare },
     { name: 'Templates', href: '/task-templates', icon: FileText },
+    { name: 'Team', href: '/team', icon: Users },
     { name: 'Time Entries', href: '/time-entries', icon: List },
   ];
 
