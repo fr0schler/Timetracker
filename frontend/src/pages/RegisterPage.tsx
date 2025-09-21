@@ -1,10 +1,13 @@
 import { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { Clock, Mail, Lock, User, AlertCircle } from 'lucide-react';
+import { useTranslation } from 'react-i18next';
 import { useAuthStore } from '../store/authStore';
 import { toast } from '../store/toastStore';
+import LanguageSwitcher from '../components/LanguageSwitcher';
 
 export default function RegisterPage() {
+  const { t } = useTranslation();
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [fullName, setFullName] = useState('');
@@ -22,30 +25,30 @@ export default function RegisterPage() {
 
       // Success toast and redirect
       toast.success(
-        'Account created successfully!',
-        'You can now log in with your credentials.'
+        t('auth.accountCreated'),
+        t('auth.accountCreatedMessage')
       );
 
       // Immediate redirect to login
       navigate('/login');
     } catch (err: any) {
-      const errorMessage = err.response?.data?.detail || 'Registration failed';
+      const errorMessage = err.response?.data?.detail || t('auth.registrationFailed');
       setError(errorMessage);
 
       // Show toast based on error type
       if (errorMessage.includes('already registered') || errorMessage.includes('already exists')) {
         toast.error(
-          'Email already registered',
-          'This email is already associated with an account. Try logging in instead.'
+          t('auth.emailAlreadyRegistered'),
+          t('auth.emailAlreadyRegisteredMessage')
         );
       } else if (errorMessage.includes('email') && errorMessage.includes('valid')) {
         toast.error(
-          'Invalid email address',
-          'Please enter a valid email address.'
+          t('auth.invalidEmail'),
+          t('auth.invalidEmailMessage')
         );
       } else {
         toast.error(
-          'Registration failed',
+          t('auth.registrationFailed'),
           errorMessage
         );
       }
@@ -55,20 +58,25 @@ export default function RegisterPage() {
   return (
     <div className="min-h-screen flex items-center justify-center bg-gray-50 dark:bg-gray-900 py-12 px-4 sm:px-6 lg:px-8">
       <div className="max-w-md w-full space-y-8">
+        {/* Language Switcher */}
+        <div className="flex justify-end">
+          <LanguageSwitcher />
+        </div>
+
         <div>
           <div className="mx-auto h-12 w-12 flex items-center justify-center">
             <Clock className="h-12 w-12 text-primary-600" />
           </div>
           <h2 className="mt-6 text-center text-3xl font-extrabold text-gray-900 dark:text-white">
-            Create your account
+            {t('auth.registerTitle')}
           </h2>
           <p className="mt-2 text-center text-sm text-gray-600 dark:text-gray-400">
-            Or{' '}
+            {t('auth.registerSubtitle')}{' '}
             <Link
               to="/login"
               className="font-medium text-primary-600 hover:text-primary-500"
             >
-              sign in to your existing account
+              {t('auth.signInExisting')}
             </Link>
           </p>
         </div>
@@ -88,7 +96,7 @@ export default function RegisterPage() {
           <div className="space-y-4">
             <div>
               <label htmlFor="fullName" className="sr-only">
-                Full Name
+                {t('auth.fullName')}
               </label>
               <div className="relative">
                 <div className="absolute inset-y-0 left-0 pl-3 flex items-center">
@@ -101,14 +109,14 @@ export default function RegisterPage() {
                   value={fullName}
                   onChange={(e) => setFullName(e.target.value)}
                   className="input pl-10"
-                  placeholder="Full Name (optional)"
+                  placeholder={t('auth.fullNamePlaceholder')}
                 />
               </div>
             </div>
 
             <div>
               <label htmlFor="email" className="sr-only">
-                Email address
+                {t('auth.email')}
               </label>
               <div className="relative">
                 <div className="absolute inset-y-0 left-0 pl-3 flex items-center">
@@ -123,14 +131,14 @@ export default function RegisterPage() {
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
                   className="input pl-10"
-                  placeholder="Email address"
+                  placeholder={t('auth.email')}
                 />
               </div>
             </div>
 
             <div>
               <label htmlFor="password" className="sr-only">
-                Password
+                {t('auth.password')}
               </label>
               <div className="relative">
                 <div className="absolute inset-y-0 left-0 pl-3 flex items-center">
@@ -145,7 +153,7 @@ export default function RegisterPage() {
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
                   className="input pl-10"
-                  placeholder="Password"
+                  placeholder={t('auth.password')}
                 />
               </div>
             </div>
@@ -160,7 +168,7 @@ export default function RegisterPage() {
               {isLoading ? (
                 <div className="animate-spin rounded-full h-5 w-5 border-b-2 border-white"></div>
               ) : (
-                'Create account'
+                t('auth.createAccount')
               )}
             </button>
           </div>

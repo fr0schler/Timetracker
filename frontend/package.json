@@ -16,7 +16,10 @@
     "zustand": "^4.4.6",
     "date-fns": "^2.30.0",
     "lucide-react": "^0.292.0",
-    "axios": "^1.6.0"
+    "axios": "^1.6.0",
+    "i18next": "^23.7.6",
+    "react-i18next": "^13.5.0",
+    "i18next-browser-languagedetector": "^7.2.0"
   },
   "devDependencies": {
     "@types/react": "^18.2.37",

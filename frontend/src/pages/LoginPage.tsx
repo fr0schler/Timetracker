@@ -1,10 +1,13 @@
 import { useState } from 'react';
 import { Link, Navigate } from 'react-router-dom';
 import { Clock, Mail, Lock, AlertCircle } from 'lucide-react';
+import { useTranslation } from 'react-i18next';
 import { useAuthStore } from '../store/authStore';
 import { toast } from '../store/toastStore';
+import LanguageSwitcher from '../components/LanguageSwitcher';
 
 export default function LoginPage() {
+  const { t } = useTranslation();
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
@@ -21,20 +24,20 @@ export default function LoginPage() {
 
     try {
       await login({ username: email, password });
-      toast.success('Welcome back!', 'Successfully logged in to your account.');
+      toast.success(t('auth.welcomeBack'), t('auth.loginSuccessMessage'));
     } catch (err: any) {
-      const errorMessage = err.response?.data?.detail || 'Login failed';
+      const errorMessage = err.response?.data?.detail || t('auth.loginFailed');
       setError(errorMessage);
 
       // Show specific toast based on error
       if (errorMessage.includes('Incorrect email or password')) {
         toast.error(
-          'Invalid credentials',
-          'The email or password you entered is incorrect.'
+          t('auth.invalidCredentials'),
+          t('auth.invalidCredentialsMessage')
         );
       } else {
         toast.error(
-          'Login failed',
+          t('auth.loginFailed'),
           errorMessage
         );
       }
@@ -44,20 +47,25 @@ export default function LoginPage() {
   return (
     <div className="min-h-screen flex items-center justify-center bg-gray-50 dark:bg-gray-900 py-12 px-4 sm:px-6 lg:px-8">
       <div className="max-w-md w-full space-y-8">
+        {/* Language Switcher */}
+        <div className="flex justify-end">
+          <LanguageSwitcher />
+        </div>
+
         <div>
           <div className="mx-auto h-12 w-12 flex items-center justify-center">
             <Clock className="h-12 w-12 text-primary-600" />
           </div>
           <h2 className="mt-6 text-center text-3xl font-extrabold text-gray-900 dark:text-white">
-            Sign in to TimeTracker
+            {t('auth.loginTitle')}
           </h2>
           <p className="mt-2 text-center text-sm text-gray-600 dark:text-gray-400">
-            Or{' '}
+            {t('auth.loginSubtitle')}{' '}
             <Link
               to="/register"
               className="font-medium text-primary-600 hover:text-primary-500"
             >
-              create a new account
+              {t('auth.createNewAccount')}
             </Link>
           </p>
         </div>
@@ -77,7 +85,7 @@ export default function LoginPage() {
           <div className="space-y-4">
             <div>
               <label htmlFor="email" className="sr-only">
-                Email address
+                {t('auth.email')}
               </label>
               <div className="relative">
                 <div className="absolute inset-y-0 left-0 pl-3 flex items-center">
@@ -92,14 +100,14 @@ export default function LoginPage() {
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
                   className="input pl-10"
-                  placeholder="Email address"
+                  placeholder={t('auth.email')}
                 />
               </div>
             </div>
 
             <div>
               <label htmlFor="password" className="sr-only">
-                Password
+                {t('auth.password')}
               </label>
               <div className="relative">
                 <div className="absolute inset-y-0 left-0 pl-3 flex items-center">
@@ -114,7 +122,7 @@ export default function LoginPage() {
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
                   className="input pl-10"
-                  placeholder="Password"
+                  placeholder={t('auth.password')}
                 />
               </div>
             </div>
@@ -129,7 +137,7 @@ export default function LoginPage() {
               {isLoading ? (
                 <div className="animate-spin rounded-full h-5 w-5 border-b-2 border-white"></div>
               ) : (
-                'Sign in'
+                t('auth.signIn')
               )}
             </button>
           </div>
