@@ -41,7 +41,7 @@ async def create_default_user():
             if not existing_users:
                 # Create default admin user
                 default_user = UserCreate(
-                    email="admin@timetracker.local",
+                    email="admin@example.com",
                     password="admin123",
                     full_name="Administrator"
                 )
@@ -67,7 +67,7 @@ async def create_default_user():
                 db.add(membership)
                 await db.commit()
 
-                print("✅ Default admin user created: admin@timetracker.local / admin123")
+                print("✅ Default admin user created: admin@example.com / admin123")
                 print("✅ Default organization created")
             else:
                 print("ℹ️ Users already exist, skipping default user creation")
