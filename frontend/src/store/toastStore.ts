@@ -1,5 +1,13 @@
 import { create } from 'zustand';
-import { ToastData, ToastType } from '../components/ToastContainer';
+import { ToastType } from '../components/Toast';
+
+export interface ToastData {
+  id: string;
+  type: ToastType;
+  title: string;
+  message?: string;
+  duration?: number;
+}
 
 interface ToastStore {
   toasts: ToastData[];

@@ -1,13 +1,6 @@
 import { createPortal } from 'react-dom';
-import Toast, { ToastType } from './Toast';
-
-export interface ToastData {
-  id: string;
-  type: ToastType;
-  title: string;
-  message?: string;
-  duration?: number;
-}
+import Toast from './Toast';
+import { ToastData } from '../store/toastStore';
 
 interface ToastContainerProps {
   toasts: ToastData[];
