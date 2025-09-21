@@ -8,6 +8,7 @@ from ....schemas.task import Task, TaskCreate, TaskUpdate
 from ....schemas.user import User
 from ....services.project_service import ProjectService
 from ....services.task_service import TaskService
+from ....models.task import Task as TaskModel
 from ..deps import get_current_active_user
 
 router = APIRouter()
@@ -121,7 +122,6 @@ async def create_project_task(
         task_data['parent_task_id'] = task_data.pop('parent_id')
 
     # Create task directly with TaskModel
-    from ..models.task import Task as TaskModel
     db_task = TaskModel(**task_data)
     db.add(db_task)
     await db.commit()
