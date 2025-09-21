@@ -1,5 +1,5 @@
 import { Outlet, Link, useLocation } from 'react-router-dom';
-import { Clock, FolderOpen, List, LogOut, User } from 'lucide-react';
+import { Clock, FolderOpen, List, LogOut, User, Settings } from 'lucide-react';
 import { useAuthStore } from '../store/authStore';
 
 export default function Layout() {
@@ -53,12 +53,19 @@ export default function Layout() {
               </div>
             </div>
             <div className="flex items-center space-x-4">
-              <div className="flex items-center space-x-2">
-                <User className="h-5 w-5 text-gray-400" />
-                <span className="text-sm font-medium text-gray-700 dark:text-gray-300">
-                  {user?.full_name || user?.email}
-                </span>
-              </div>
+              <Link
+                to="/profile"
+                className="flex items-center space-x-2 text-sm font-medium text-gray-700 hover:text-gray-900 dark:text-gray-300 dark:hover:text-white"
+              >
+                <User className="h-5 w-5" />
+                <span>{user?.full_name || user?.email}</span>
+              </Link>
+              <Link
+                to="/settings"
+                className="text-gray-400 hover:text-gray-500 dark:hover:text-gray-300"
+              >
+                <Settings className="h-5 w-5" />
+              </Link>
               <button
                 onClick={logout}
                 className="btn btn-secondary flex items-center space-x-2"

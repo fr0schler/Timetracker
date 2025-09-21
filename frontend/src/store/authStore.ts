@@ -1,5 +1,5 @@
 import { create } from 'zustand';
-import { User, LoginRequest, RegisterRequest } from '../types';
+import { User, LoginRequest, RegisterRequest, UpdateUserProfile } from '../types';
 import { authApi } from '../services/api';
 
 interface AuthState {
@@ -10,6 +10,7 @@ interface AuthState {
   register: (data: RegisterRequest) => Promise<void>;
   logout: () => void;
   loadUser: () => Promise<void>;
+  updateProfile: (data: UpdateUserProfile) => Promise<void>;
 }
 
 export const useAuthStore = create<AuthState>((set, get) => ({
@@ -63,6 +64,21 @@ export const useAuthStore = create<AuthState>((set, get) => ({
     } catch (error) {
       localStorage.removeItem('access_token');
       set({ user: null, isAuthenticated: false });
+    } finally {
+      set({ isLoading: false });
+    }
+  },
+
+  updateProfile: async (data: UpdateUserProfile) => {
+    const currentUser = get().user;
+    if (!currentUser) throw new Error('No user logged in');
+
+    set({ isLoading: true });
+    try {
+      const updatedUser = await authApi.updateProfile(data);
+      set({ user: updatedUser });
+    } catch (error) {
+      throw error;
     } finally {
       set({ isLoading: false });
     }

@@ -13,6 +13,7 @@ import {
   LoginRequest,
   RegisterRequest,
   AuthResponse,
+  UpdateUserProfile,
   Subscription,
   SubscriptionPlan,
 } from '../types';
@@ -62,6 +63,11 @@ export const authApi = {
 
   getMe: async (): Promise<User> => {
     const response: AxiosResponse<User> = await api.get('/auth/me');
+    return response.data;
+  },
+
+  updateProfile: async (data: UpdateUserProfile): Promise<User> => {
+    const response: AxiosResponse<User> = await api.put('/users/profile', data);
     return response.data;
   },
 };

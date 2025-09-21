@@ -10,6 +10,8 @@ import RegisterPage from './pages/RegisterPage';
 import DashboardPage from './pages/DashboardPage';
 import ProjectsPage from './pages/ProjectsPage';
 import TimeEntriesPage from './pages/TimeEntriesPage';
+import UserProfilePage from './pages/UserProfilePage';
+import SettingsPage from './pages/SettingsPage';
 import Layout from './components/Layout';
 import ProtectedRoute from './components/ProtectedRoute';
 import CommandPalette from './components/CommandPalette';
@@ -93,6 +95,28 @@ function App() {
           }
         >
           <Route index element={<TimeEntriesPage />} />
+        </Route>
+
+        <Route
+          path="/profile"
+          element={
+            <ProtectedRoute>
+              <Layout />
+            </ProtectedRoute>
+          }
+        >
+          <Route index element={<UserProfilePage />} />
+        </Route>
+
+        <Route
+          path="/settings"
+          element={
+            <ProtectedRoute>
+              <Layout />
+            </ProtectedRoute>
+          }
+        >
+          <Route index element={<SettingsPage />} />
         </Route>
 
         {/* Catch all route */}

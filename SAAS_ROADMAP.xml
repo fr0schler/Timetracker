@@ -1,0 +1,516 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<saas_roadmap>
+    <project_info>
+        <name>TimeTracker SaaS UI Enhancement</name>
+        <version>1.0</version>
+        <created_date>2025-09-21</created_date>
+        <last_updated>2025-09-21</last_updated>
+        <description>Comprehensive 7-phase roadmap for transforming TimeTracker into a full-featured SaaS application</description>
+    </project_info>
+
+    <phases>
+        <!-- PHASE 1: USER PROFILE & SETTINGS -->
+        <phase>
+            <id>1</id>
+            <name>User Profile &amp; Settings</name>
+            <description>Benutzerprofile mit Avatar, Einstellungen, Präferenzen</description>
+            <status>completed</status>
+            <priority>high</priority>
+            <completion_date>2025-09-21</completion_date>
+            <estimated_days>5-7</estimated_days>
+            <tasks>
+                <task>
+                    <id>1.1</id>
+                    <name>UserProfile Seite erstellen</name>
+                    <description>Bearbeitbare Felder (Name, Email, Avatar, Bio, Timezone)</description>
+                    <status>completed</status>
+                    <files_to_create>
+                        <file>frontend/src/pages/UserProfilePage.tsx</file>
+                        <file>frontend/src/components/UserProfile/ProfileForm.tsx</file>
+                        <file>frontend/src/components/UserProfile/AvatarUpload.tsx</file>
+                    </files_to_create>
+                    <backend_changes>
+                        <endpoint>PUT /api/v1/users/profile - Update user profile</endpoint>
+                        <model>Add avatar_url, bio, timezone to User model</model>
+                    </backend_changes>
+                </task>
+                <task>
+                    <id>1.2</id>
+                    <name>Settings Seite erstellen</name>
+                    <description>Keyboard Shortcuts, Language, Theme, Notifications</description>
+                    <status>completed</status>
+                    <files_to_create>
+                        <file>frontend/src/pages/SettingsPage.tsx</file>
+                        <file>frontend/src/components/Settings/KeyboardSettings.tsx</file>
+                        <file>frontend/src/components/Settings/ThemeSettings.tsx</file>
+                        <file>frontend/src/components/Settings/NotificationSettings.tsx</file>
+                    </files_to_create>
+                    <backend_changes>
+                        <endpoint>GET/PUT /api/v1/users/settings - User preferences</endpoint>
+                        <model>Add user_settings JSON field to User model</model>
+                    </backend_changes>
+                </task>
+                <task>
+                    <id>1.3</id>
+                    <name>Avatar Upload System</name>
+                    <description>Image Upload mit Cropping und File Management</description>
+                    <status>completed</status>
+                    <files_to_create>
+                        <file>frontend/src/components/Common/ImageCropper.tsx</file>
+                        <file>frontend/src/services/fileUpload.ts</file>
+                    </files_to_create>
+                    <backend_changes>
+                        <endpoint>POST /api/v1/users/avatar - Upload avatar image</endpoint>
+                        <service>File storage service (local/S3)</service>
+                    </backend_changes>
+                </task>
+            </tasks>
+        </phase>
+
+        <!-- PHASE 2: ENHANCED TASK MANAGEMENT -->
+        <phase>
+            <id>2</id>
+            <name>Enhanced Task Management</name>
+            <description>Verbesserte Task-Verwaltung für alle User</description>
+            <status>pending</status>
+            <priority>high</priority>
+            <estimated_days>8-10</estimated_days>
+            <tasks>
+                <task>
+                    <id>2.1</id>
+                    <name>Task Creation Modal</name>
+                    <description>Rich Text Editor, Attachments, Due Dates, Priority</description>
+                    <status>pending</status>
+                    <files_to_create>
+                        <file>frontend/src/components/Tasks/TaskCreateModal.tsx</file>
+                        <file>frontend/src/components/Tasks/RichTextEditor.tsx</file>
+                        <file>frontend/src/components/Tasks/AttachmentUpload.tsx</file>
+                    </files_to_create>
+                    <backend_changes>
+                        <endpoint>POST /api/v1/tasks - Enhanced task creation</endpoint>
+                        <model>Add due_date, attachments to Task model</model>
+                    </backend_changes>
+                </task>
+                <task>
+                    <id>2.2</id>
+                    <name>Kanban Board View</name>
+                    <description>Drag &amp; Drop Board (TODO, IN_PROGRESS, DONE, CANCELLED)</description>
+                    <status>pending</status>
+                    <files_to_create>
+                        <file>frontend/src/pages/TaskBoardPage.tsx</file>
+                        <file>frontend/src/components/Tasks/KanbanBoard.tsx</file>
+                        <file>frontend/src/components/Tasks/TaskCard.tsx</file>
+                        <file>frontend/src/components/Tasks/DragDropContext.tsx</file>
+                    </files_to_create>
+                    <backend_changes>
+                        <endpoint>PUT /api/v1/tasks/{id}/status - Update task status</endpoint>
+                        <endpoint>PUT /api/v1/tasks/bulk-update - Bulk status updates</endpoint>
+                    </backend_changes>
+                </task>
+                <task>
+                    <id>2.3</id>
+                    <name>Task Comments &amp; Activity</name>
+                    <description>Comment System mit Activity Log</description>
+                    <status>pending</status>
+                    <files_to_create>
+                        <file>frontend/src/components/Tasks/TaskComments.tsx</file>
+                        <file>frontend/src/components/Tasks/ActivityLog.tsx</file>
+                    </files_to_create>
+                    <backend_changes>
+                        <model>Create TaskComment model</model>
+                        <model>Create TaskActivity model</model>
+                        <endpoint>GET/POST /api/v1/tasks/{id}/comments</endpoint>
+                        <endpoint>GET /api/v1/tasks/{id}/activity</endpoint>
+                    </backend_changes>
+                </task>
+                <task>
+                    <id>2.4</id>
+                    <name>Task Templates</name>
+                    <description>Wiederkehrende Aufgaben mit Vorlagen</description>
+                    <status>pending</status>
+                    <files_to_create>
+                        <file>frontend/src/components/Tasks/TaskTemplates.tsx</file>
+                        <file>frontend/src/components/Tasks/TemplateSelector.tsx</file>
+                    </files_to_create>
+                    <backend_changes>
+                        <model>Create TaskTemplate model</model>
+                        <endpoint>GET/POST /api/v1/task-templates</endpoint>
+                        <endpoint>POST /api/v1/tasks/from-template/{template_id}</endpoint>
+                    </backend_changes>
+                </task>
+            </tasks>
+        </phase>
+
+        <!-- PHASE 3: ORGANIZATION & TEAM MANAGEMENT -->
+        <phase>
+            <id>3</id>
+            <name>Organization &amp; Team Management</name>
+            <description>Admin Tools für Organisationsverwalter</description>
+            <status>pending</status>
+            <priority>medium</priority>
+            <estimated_days>6-8</estimated_days>
+            <tasks>
+                <task>
+                    <id>3.1</id>
+                    <name>Team Member Invitation</name>
+                    <description>Email-Einladungssystem mit Token-basierter Registration</description>
+                    <status>pending</status>
+                    <files_to_create>
+                        <file>frontend/src/pages/TeamManagementPage.tsx</file>
+                        <file>frontend/src/components/Team/InviteMemberModal.tsx</file>
+                        <file>frontend/src/components/Team/MemberList.tsx</file>
+                    </files_to_create>
+                    <backend_changes>
+                        <model>Create UserInvitation model</model>
+                        <endpoint>POST /api/v1/invitations - Send invitation</endpoint>
+                        <endpoint>POST /api/v1/invitations/{token}/accept</endpoint>
+                        <service>Email service for invitations</service>
+                    </backend_changes>
+                </task>
+                <task>
+                    <id>3.2</id>
+                    <name>User Roles &amp; Permissions</name>
+                    <description>RBAC System (Owner, Admin, Member, Viewer)</description>
+                    <status>pending</status>
+                    <files_to_create>
+                        <file>frontend/src/components/Team/RoleSelector.tsx</file>
+                        <file>frontend/src/hooks/usePermissions.ts</file>
+                    </files_to_create>
+                    <backend_changes>
+                        <model>Add role field to User model</model>
+                        <service>Permission service for role-based access</service>
+                        <middleware>Role-based API access control</middleware>
+                    </backend_changes>
+                </task>
+                <task>
+                    <id>3.3</id>
+                    <name>Organization Settings</name>
+                    <description>Company Branding, Domain Settings, Subscription Management</description>
+                    <status>pending</status>
+                    <files_to_create>
+                        <file>frontend/src/pages/OrganizationSettingsPage.tsx</file>
+                        <file>frontend/src/components/Organization/BrandingSettings.tsx</file>
+                    </files_to_create>
+                    <backend_changes>
+                        <model>Add branding fields to Organization model</model>
+                        <endpoint>PUT /api/v1/organizations/settings</endpoint>
+                    </backend_changes>
+                </task>
+                <task>
+                    <id>3.4</id>
+                    <name>Team Activity Dashboard</name>
+                    <description>Recent Activities, Team Performance Metrics</description>
+                    <status>pending</status>
+                    <files_to_create>
+                        <file>frontend/src/components/Dashboard/TeamActivity.tsx</file>
+                        <file>frontend/src/components/Charts/ActivityChart.tsx</file>
+                    </files_to_create>
+                    <backend_changes>
+                        <endpoint>GET /api/v1/organizations/activity</endpoint>
+                        <endpoint>GET /api/v1/organizations/metrics</endpoint>
+                    </backend_changes>
+                </task>
+            </tasks>
+        </phase>
+
+        <!-- PHASE 4: ADVANCED SAAS FEATURES -->
+        <phase>
+            <id>4</id>
+            <name>Advanced SaaS Features</name>
+            <description>Erweiterte SaaS-Funktionalitäten</description>
+            <status>pending</status>
+            <priority>medium</priority>
+            <estimated_days>10-12</estimated_days>
+            <tasks>
+                <task>
+                    <id>4.1</id>
+                    <name>Usage Analytics Dashboard</name>
+                    <description>Charts, Metriken, Usage Statistics</description>
+                    <status>pending</status>
+                    <files_to_create>
+                        <file>frontend/src/pages/AnalyticsPage.tsx</file>
+                        <file>frontend/src/components/Analytics/UsageCharts.tsx</file>
+                        <file>frontend/src/components/Analytics/TimeTrackingMetrics.tsx</file>
+                    </files_to_create>
+                    <backend_changes>
+                        <service>Analytics service für Datensammlung</service>
+                        <endpoint>GET /api/v1/analytics/usage</endpoint>
+                        <endpoint>GET /api/v1/analytics/time-tracking</endpoint>
+                    </backend_changes>
+                </task>
+                <task>
+                    <id>4.2</id>
+                    <name>Reports &amp; Export</name>
+                    <description>PDF, CSV, Excel Export für Time Tracking Data</description>
+                    <status>pending</status>
+                    <files_to_create>
+                        <file>frontend/src/pages/ReportsPage.tsx</file>
+                        <file>frontend/src/components/Reports/ReportGenerator.tsx</file>
+                        <file>frontend/src/components/Reports/ExportOptions.tsx</file>
+                    </files_to_create>
+                    <backend_changes>
+                        <service>Report generation service</service>
+                        <endpoint>POST /api/v1/reports/generate</endpoint>
+                        <endpoint>GET /api/v1/reports/{id}/download</endpoint>
+                    </backend_changes>
+                </task>
+                <task>
+                    <id>4.3</id>
+                    <name>Project Templates</name>
+                    <description>Workspace Presets, Project Vorlagen</description>
+                    <status>pending</status>
+                    <files_to_create>
+                        <file>frontend/src/components/Projects/ProjectTemplates.tsx</file>
+                        <file>frontend/src/components/Projects/TemplateSelector.tsx</file>
+                    </files_to_create>
+                    <backend_changes>
+                        <model>Create ProjectTemplate model</model>
+                        <endpoint>GET/POST /api/v1/project-templates</endpoint>
+                        <endpoint>POST /api/v1/projects/from-template/{template_id}</endpoint>
+                    </backend_changes>
+                </task>
+                <task>
+                    <id>4.4</id>
+                    <name>API Keys Management</name>
+                    <description>Third-party Integration APIs</description>
+                    <status>pending</status>
+                    <files_to_create>
+                        <file>frontend/src/pages/APIKeysPage.tsx</file>
+                        <file>frontend/src/components/API/KeyGenerator.tsx</file>
+                    </files_to_create>
+                    <backend_changes>
+                        <model>Create APIKey model</model>
+                        <endpoint>GET/POST/DELETE /api/v1/api-keys</endpoint>
+                        <middleware>API key authentication</middleware>
+                    </backend_changes>
+                </task>
+            </tasks>
+        </phase>
+
+        <!-- PHASE 5: ENHANCED USER EXPERIENCE -->
+        <phase>
+            <id>5</id>
+            <name>Enhanced User Experience</name>
+            <description>Verbesserte Benutzererfahrung</description>
+            <status>pending</status>
+            <priority>medium</priority>
+            <estimated_days>7-9</estimated_days>
+            <tasks>
+                <task>
+                    <id>5.1</id>
+                    <name>Command Palette Enhancement</name>
+                    <description>Erweiterte Quick Actions, Global Search</description>
+                    <status>pending</status>
+                    <files_to_modify>
+                        <file>frontend/src/components/CommandPalette.tsx</file>
+                    </files_to_modify>
+                    <files_to_create>
+                        <file>frontend/src/components/CommandPalette/QuickActions.tsx</file>
+                        <file>frontend/src/services/commandSearch.ts</file>
+                    </files_to_create>
+                </task>
+                <task>
+                    <id>5.2</id>
+                    <name>Notification Center</name>
+                    <description>In-App Benachrichtigungen, Notification History</description>
+                    <status>pending</status>
+                    <files_to_create>
+                        <file>frontend/src/components/Notifications/NotificationCenter.tsx</file>
+                        <file>frontend/src/components/Notifications/NotificationList.tsx</file>
+                        <file>frontend/src/store/notificationStore.ts</file>
+                    </files_to_create>
+                    <backend_changes>
+                        <model>Create Notification model</model>
+                        <endpoint>GET /api/v1/notifications</endpoint>
+                        <endpoint>PUT /api/v1/notifications/{id}/read</endpoint>
+                    </backend_changes>
+                </task>
+                <task>
+                    <id>5.3</id>
+                    <name>Theme System</name>
+                    <description>Dark/Light Theme + Custom Theme Editor</description>
+                    <status>pending</status>
+                    <files_to_create>
+                        <file>frontend/src/components/Theme/ThemeProvider.tsx</file>
+                        <file>frontend/src/components/Theme/ThemeEditor.tsx</file>
+                        <file>frontend/src/store/themeStore.ts</file>
+                    </files_to_create>
+                </task>
+                <task>
+                    <id>5.4</id>
+                    <name>Mobile Navigation</name>
+                    <description>Bottom Tab Bar, Mobile-optimierte UI</description>
+                    <status>pending</status>
+                    <files_to_create>
+                        <file>frontend/src/components/Mobile/BottomTabBar.tsx</file>
+                        <file>frontend/src/components/Mobile/MobileHeader.tsx</file>
+                    </files_to_create>
+                </task>
+            </tasks>
+        </phase>
+
+        <!-- PHASE 6: INTEGRATION & AUTOMATION -->
+        <phase>
+            <id>6</id>
+            <name>Integration &amp; Automation</name>
+            <description>Externe Integrationen</description>
+            <status>pending</status>
+            <priority>low</priority>
+            <estimated_days>12-15</estimated_days>
+            <tasks>
+                <task>
+                    <id>6.1</id>
+                    <name>Slack Integration</name>
+                    <description>Notifications, Commands, Status Updates</description>
+                    <status>pending</status>
+                    <backend_changes>
+                        <service>Slack webhook service</service>
+                        <endpoint>POST /api/v1/integrations/slack/webhook</endpoint>
+                    </backend_changes>
+                </task>
+                <task>
+                    <id>6.2</id>
+                    <name>Calendar Integration</name>
+                    <description>Google Calendar, Outlook Time Blocking</description>
+                    <status>pending</status>
+                    <backend_changes>
+                        <service>Calendar API integration</service>
+                        <endpoint>GET/POST /api/v1/integrations/calendar</endpoint>
+                    </backend_changes>
+                </task>
+                <task>
+                    <id>6.3</id>
+                    <name>Budget Tracking</name>
+                    <description>Project Time Limits, Cost Tracking</description>
+                    <status>pending</status>
+                    <backend_changes>
+                        <model>Add budget fields to Project model</model>
+                        <endpoint>GET /api/v1/projects/{id}/budget</endpoint>
+                    </backend_changes>
+                </task>
+                <task>
+                    <id>6.4</id>
+                    <name>Auto-Suggestions</name>
+                    <description>Pattern-basierte Time Entry Vorschläge</description>
+                    <status>pending</status>
+                    <backend_changes>
+                        <service>ML suggestion service</service>
+                        <endpoint>GET /api/v1/suggestions/time-entries</endpoint>
+                    </backend_changes>
+                </task>
+            </tasks>
+        </phase>
+
+        <!-- PHASE 7: PERFORMANCE & SCALABILITY -->
+        <phase>
+            <id>7</id>
+            <name>Performance &amp; Scalability</name>
+            <description>Optimierung für Production</description>
+            <status>pending</status>
+            <priority>low</priority>
+            <estimated_days>8-10</estimated_days>
+            <tasks>
+                <task>
+                    <id>7.1</id>
+                    <name>Database Optimization</name>
+                    <description>Query Performance, Caching Strategy</description>
+                    <status>pending</status>
+                    <backend_changes>
+                        <optimization>Database indices optimization</optimization>
+                        <optimization>Redis caching layer</optimization>
+                        <optimization>Query optimization</optimization>
+                    </backend_changes>
+                </task>
+                <task>
+                    <id>7.2</id>
+                    <name>Real-time Updates</name>
+                    <description>WebSocket für Team Collaboration</description>
+                    <status>pending</status>
+                    <backend_changes>
+                        <service>WebSocket service</service>
+                        <endpoint>WS /api/v1/ws/organizations/{id}</endpoint>
+                    </backend_changes>
+                </task>
+                <task>
+                    <id>7.3</id>
+                    <name>PWA Features</name>
+                    <description>Offline Mode, Background Sync</description>
+                    <status>pending</status>
+                    <files_to_modify>
+                        <file>frontend/public/sw.js</file>
+                        <file>frontend/src/services/offlineSync.ts</file>
+                    </files_to_modify>
+                </task>
+                <task>
+                    <id>7.4</id>
+                    <name>Advanced Search</name>
+                    <description>Full-Text Search, Advanced Filtering</description>
+                    <status>pending</status>
+                    <backend_changes>
+                        <service>Elasticsearch integration</service>
+                        <endpoint>GET /api/v1/search</endpoint>
+                    </backend_changes>
+                </task>
+            </tasks>
+        </phase>
+    </phases>
+
+    <implementation_notes>
+        <current_status>
+            <phase_in_progress>Phase 1 COMPLETED - Ready to start Phase 2</phase_in_progress>
+            <next_milestone>Complete Phase 2: Enhanced Task Management</next_milestone>
+            <completed_phases>
+                <phase id="1" name="User Profile &amp; Settings" completed_date="2025-09-21">
+                    <achievements>
+                        <achievement>✅ UserProfile page with editable fields (name, email, bio, timezone)</achievement>
+                        <achievement>✅ Comprehensive Settings page with tabbed interface</achievement>
+                        <achievement>✅ Keyboard shortcuts configuration system</achievement>
+                        <achievement>✅ Theme management (Light/Dark/System + Custom colors)</achievement>
+                        <achievement>✅ Notification settings with granular controls</achievement>
+                        <achievement>✅ Language switching (German/English)</achievement>
+                        <achievement>✅ Avatar upload system with image cropping</achievement>
+                        <achievement>✅ File upload service with validation and progress tracking</achievement>
+                        <achievement>✅ Complete internationalization for all new components</achievement>
+                        <achievement>✅ Mobile-responsive design maintained</achievement>
+                        <achievement>✅ BUILD VERIFICATION PASSED - All TypeScript errors resolved</achievement>
+                        <achievement>✅ Production build successful (438.69 KB bundle, 128.97 KB gzipped)</achievement>
+                        <achievement>✅ PWA integration maintained</achievement>
+                    </achievements>
+                </phase>
+            </completed_phases>
+        </current_status>
+        <technical_requirements>
+            <frontend_dependencies>
+                <dependency>@headlessui/react - UI components</dependency>
+                <dependency>react-hook-form - Form handling</dependency>
+                <dependency>react-dropzone - File uploads</dependency>
+                <dependency>react-beautiful-dnd - Drag and drop</dependency>
+                <dependency>recharts - Charts and analytics</dependency>
+                <dependency>react-image-crop - Avatar cropping</dependency>
+            </frontend_dependencies>
+            <backend_dependencies>
+                <dependency>python-multipart - File upload handling</dependency>
+                <dependency>Pillow - Image processing</dependency>
+                <dependency>celery - Background tasks</dependency>
+                <dependency>redis - Caching and sessions</dependency>
+                <dependency>websockets - Real-time updates</dependency>
+            </backend_dependencies>
+        </technical_requirements>
+        <success_criteria>
+            <criteria>All Phase 1 tasks completed with working UI</criteria>
+            <criteria>User can edit profile and change settings</criteria>
+            <criteria>Avatar upload and cropping functional</criteria>
+            <criteria>Settings persist across sessions</criteria>
+            <criteria>Mobile-responsive design maintained</criteria>
+            <criteria>Internationalization preserved (DE/EN)</criteria>
+            <criteria>✅ PHASE BUILD VERIFICATION PASSED - No TypeScript/build errors</criteria>
+            <criteria>✅ Production build successful with optimal bundle size</criteria>
+        </success_criteria>
+        <build_requirements>
+            <requirement>Each phase MUST end with successful npm run build</requirement>
+            <requirement>All TypeScript errors must be resolved before phase completion</requirement>
+            <requirement>Build bundle size should remain optimized</requirement>
+            <requirement>PWA functionality must be preserved</requirement>
+        </build_requirements>
+    </implementation_notes>
+</saas_roadmap>

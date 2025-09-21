@@ -4,6 +4,9 @@ export interface User {
   full_name?: string;
   is_active: boolean;
   keyboard_shortcuts_enabled?: boolean;
+  avatar_url?: string;
+  bio?: string;
+  timezone?: string;
   created_at: string;
 }
 
@@ -128,4 +131,11 @@ export interface SubscriptionPlan {
 
 export interface ApiError {
   detail: string;
+}
+
+// User Profile related types
+export interface UpdateUserProfile {
+  full_name?: string;
+  bio?: string;
+  timezone?: string;
 }
