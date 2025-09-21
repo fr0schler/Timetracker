@@ -1,14 +1,14 @@
 import { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import { Clock, Mail, Lock, User, AlertCircle, CheckCircle } from 'lucide-react';
+import { Clock, Mail, Lock, User, AlertCircle } from 'lucide-react';
 import { useAuthStore } from '../store/authStore';
+import { toast } from '../store/toastStore';
 
 export default function RegisterPage() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [fullName, setFullName] = useState('');
   const [error, setError] = useState('');
-  const [success, setSuccess] = useState(false);
 
   const { register, isLoading } = useAuthStore();
   const navigate = useNavigate();
@@ -19,32 +19,38 @@ export default function RegisterPage() {
 
     try {
       await register({ email, password, full_name: fullName || undefined });
-      setSuccess(true);
-      setTimeout(() => {
-        navigate('/login');
-      }, 2000);
+
+      // Success toast and redirect
+      toast.success(
+        'Account created successfully!',
+        'You can now log in with your credentials.'
+      );
+
+      // Immediate redirect to login
+      navigate('/login');
     } catch (err: any) {
-      setError(err.response?.data?.detail || 'Registration failed');
+      const errorMessage = err.response?.data?.detail || 'Registration failed';
+      setError(errorMessage);
+
+      // Show toast based on error type
+      if (errorMessage.includes('already registered') || errorMessage.includes('already exists')) {
+        toast.error(
+          'Email already registered',
+          'This email is already associated with an account. Try logging in instead.'
+        );
+      } else if (errorMessage.includes('email') && errorMessage.includes('valid')) {
+        toast.error(
+          'Invalid email address',
+          'Please enter a valid email address.'
+        );
+      } else {
+        toast.error(
+          'Registration failed',
+          errorMessage
+        );
+      }
     }
   };
-
-  if (success) {
-    return (
-      <div className="min-h-screen flex items-center justify-center bg-gray-50 dark:bg-gray-900 py-12 px-4 sm:px-6 lg:px-8">
-        <div className="max-w-md w-full space-y-8">
-          <div className="text-center">
-            <CheckCircle className="mx-auto h-12 w-12 text-green-500" />
-            <h2 className="mt-6 text-3xl font-extrabold text-gray-900 dark:text-white">
-              Registration Successful!
-            </h2>
-            <p className="mt-2 text-sm text-gray-600 dark:text-gray-400">
-              Redirecting to login...
-            </p>
-          </div>
-        </div>
-      </div>
-    );
-  }
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-gray-50 dark:bg-gray-900 py-12 px-4 sm:px-6 lg:px-8">

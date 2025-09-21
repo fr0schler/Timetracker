@@ -2,6 +2,7 @@ import { useEffect } from 'react';
 import { Routes, Route, Navigate, useLocation } from 'react-router-dom';
 import { useAuthStore } from './store/authStore';
 import { useTimeEntryStore } from './store/timeEntryStore';
+import { useToastStore } from './store/toastStore';
 import { useKeyboardShortcuts } from './hooks/useKeyboardShortcuts';
 import LandingPage from './pages/LandingPage';
 import LoginPage from './pages/LoginPage';
@@ -13,10 +14,12 @@ import Layout from './components/Layout';
 import ProtectedRoute from './components/ProtectedRoute';
 import CommandPalette from './components/CommandPalette';
 import TimerDescriptionDialog from './components/TimerDescriptionDialog';
+import ToastContainer from './components/ToastContainer';
 
 function App() {
   const { loadUser, isAuthenticated, isLoading } = useAuthStore();
   const { pendingTimeEntry, completePendingTimeEntry, clearPendingTimeEntry } = useTimeEntryStore();
+  const { toasts, removeToast } = useToastStore();
   const location = useLocation();
 
   // Initialize keyboard shortcuts
@@ -112,6 +115,9 @@ function App() {
           onCancel={clearPendingTimeEntry}
         />
       )}
+
+      {/* Toast Notifications */}
+      <ToastContainer toasts={toasts} onRemoveToast={removeToast} />
     </>
   );
 }

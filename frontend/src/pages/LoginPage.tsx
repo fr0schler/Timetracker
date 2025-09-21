@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { Link, Navigate } from 'react-router-dom';
 import { Clock, Mail, Lock, AlertCircle } from 'lucide-react';
 import { useAuthStore } from '../store/authStore';
+import { toast } from '../store/toastStore';
 
 export default function LoginPage() {
   const [email, setEmail] = useState('');
@@ -20,8 +21,23 @@ export default function LoginPage() {
 
     try {
       await login({ username: email, password });
+      toast.success('Welcome back!', 'Successfully logged in to your account.');
     } catch (err: any) {
-      setError(err.response?.data?.detail || 'Login failed');
+      const errorMessage = err.response?.data?.detail || 'Login failed';
+      setError(errorMessage);
+
+      // Show specific toast based on error
+      if (errorMessage.includes('Incorrect email or password')) {
+        toast.error(
+          'Invalid credentials',
+          'The email or password you entered is incorrect.'
+        );
+      } else {
+        toast.error(
+          'Login failed',
+          errorMessage
+        );
+      }
     }
   };
 
