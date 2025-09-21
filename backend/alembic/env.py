@@ -32,7 +32,9 @@ target_metadata = Base.metadata
 # ... etc.
 
 def get_url():
-    return os.getenv("DATABASE_URL", "postgresql://postgres:postgres@localhost:5432/timetracker")
+    url = os.getenv("DATABASE_URL", "postgresql://postgres:postgres@localhost:5432/timetracker")
+    # Convert to async driver for Alembic
+    return url.replace("postgresql://", "postgresql+asyncpg://")
 
 def run_migrations_offline() -> None:
     """Run migrations in 'offline' mode.

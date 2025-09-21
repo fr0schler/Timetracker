@@ -3,13 +3,18 @@ import {
   User,
   Project,
   TimeEntry,
+  Task,
   CreateProject,
   UpdateProject,
   CreateTimeEntry,
   UpdateTimeEntry,
+  CreateTask,
+  UpdateTask,
   LoginRequest,
   RegisterRequest,
   AuthResponse,
+  Subscription,
+  SubscriptionPlan,
 } from '../types';
 
 import { API_BASE_URL } from '../config';
@@ -64,7 +69,7 @@ export const authApi = {
 // Projects API
 export const projectsApi = {
   getAll: async (): Promise<Project[]> => {
-    const response: AxiosResponse<Project[]> = await api.get('/projects');
+    const response: AxiosResponse<Project[]> = await api.get('/projects/');
     return response.data;
   },
 
@@ -74,7 +79,7 @@ export const projectsApi = {
   },
 
   create: async (data: CreateProject): Promise<Project> => {
-    const response: AxiosResponse<Project> = await api.post('/projects', data);
+    const response: AxiosResponse<Project> = await api.post('/projects/', data);
     return response.data;
   },
 
@@ -91,7 +96,7 @@ export const projectsApi = {
 // Time Entries API
 export const timeEntriesApi = {
   getAll: async (): Promise<TimeEntry[]> => {
-    const response: AxiosResponse<TimeEntry[]> = await api.get('/time-entries');
+    const response: AxiosResponse<TimeEntry[]> = await api.get('/time-entries/');
     return response.data;
   },
 
@@ -106,7 +111,7 @@ export const timeEntriesApi = {
   },
 
   create: async (data: CreateTimeEntry): Promise<TimeEntry> => {
-    const response: AxiosResponse<TimeEntry> = await api.post('/time-entries', data);
+    const response: AxiosResponse<TimeEntry> = await api.post('/time-entries/', data);
     return response.data;
   },
 
@@ -122,6 +127,60 @@ export const timeEntriesApi = {
 
   delete: async (id: number): Promise<void> => {
     await api.delete(`/time-entries/${id}`);
+  },
+};
+
+// Tasks API
+export const tasksApi = {
+  getByProject: async (projectId: number): Promise<Task[]> => {
+    const response: AxiosResponse<Task[]> = await api.get(`/projects/${projectId}/tasks/`);
+    return response.data;
+  },
+
+  getById: async (projectId: number, taskId: number): Promise<Task> => {
+    const response: AxiosResponse<Task> = await api.get(`/projects/${projectId}/tasks/${taskId}`);
+    return response.data;
+  },
+
+  create: async (projectId: number, data: CreateTask): Promise<Task> => {
+    const response: AxiosResponse<Task> = await api.post(`/projects/${projectId}/tasks/`, data);
+    return response.data;
+  },
+
+  update: async (projectId: number, taskId: number, data: UpdateTask): Promise<Task> => {
+    const response: AxiosResponse<Task> = await api.put(`/projects/${projectId}/tasks/${taskId}`, data);
+    return response.data;
+  },
+
+  delete: async (projectId: number, taskId: number): Promise<void> => {
+    await api.delete(`/projects/${projectId}/tasks/${taskId}`);
+  },
+};
+
+// Subscription API
+export const subscriptionApi = {
+  getCurrent: async (): Promise<Subscription> => {
+    const response: AxiosResponse<Subscription> = await api.get('/subscriptions/current');
+    return response.data;
+  },
+
+  getPlans: async (): Promise<{ plans: SubscriptionPlan[] }> => {
+    const response: AxiosResponse<{ plans: SubscriptionPlan[] }> = await api.get('/subscriptions/plans');
+    return response.data;
+  },
+
+  createCheckoutSession: async (data: {
+    tier: 'professional' | 'enterprise';
+    success_url: string;
+    cancel_url: string;
+  }): Promise<{ checkout_url: string; session_id: string }> => {
+    const response = await api.post('/subscriptions/checkout', data);
+    return response.data;
+  },
+
+  createPortalSession: async (return_url: string): Promise<{ portal_url: string }> => {
+    const response = await api.post('/subscriptions/portal', { return_url });
+    return response.data;
   },
 };
 

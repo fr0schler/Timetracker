@@ -1,12 +1,14 @@
 import { useState, useEffect } from 'react';
-import { Plus, Edit2, Trash2, FolderOpen } from 'lucide-react';
+import { Plus, Edit2, Trash2, FolderOpen, ChevronRight } from 'lucide-react';
 import { useProjectStore } from '../store/projectStore';
-import { CreateProject, UpdateProject } from '../types';
+import { CreateProject, UpdateProject, Project } from '../types';
+import ProjectDetail from '../components/ProjectDetail';
 
 export default function ProjectsPage() {
   const { projects, fetchProjects, createProject, updateProject, deleteProject, isLoading } = useProjectStore();
   const [showCreateForm, setShowCreateForm] = useState(false);
   const [editingProject, setEditingProject] = useState<number | null>(null);
+  const [selectedProject, setSelectedProject] = useState<Project | null>(null);
 
   useEffect(() => {
     fetchProjects();
@@ -40,6 +42,16 @@ export default function ProjectsPage() {
     }
   };
 
+  // Show project detail if one is selected
+  if (selectedProject) {
+    return (
+      <ProjectDetail
+        project={selectedProject}
+        onBack={() => setSelectedProject(null)}
+      />
+    );
+  }
+
   return (
     <div className="space-y-6">
       <div className="flex items-center justify-between">
@@ -65,7 +77,11 @@ export default function ProjectsPage() {
 
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
         {projects.map((project) => (
-          <div key={project.id} className="card p-6">
+          <div
+            key={project.id}
+            className={`card p-6 ${editingProject !== project.id ? 'cursor-pointer hover:shadow-lg transition-shadow' : ''}`}
+            onClick={() => editingProject !== project.id && setSelectedProject(project)}
+          >
             {editingProject === project.id ? (
               <ProjectForm
                 project={project}
@@ -87,17 +103,24 @@ export default function ProjectsPage() {
                   </div>
                   <div className="flex items-center space-x-2">
                     <button
-                      onClick={() => setEditingProject(project.id)}
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        setEditingProject(project.id);
+                      }}
                       className="p-1 text-gray-400 hover:text-gray-600"
                     >
                       <Edit2 className="h-4 w-4" />
                     </button>
                     <button
-                      onClick={() => handleDeleteProject(project.id)}
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        handleDeleteProject(project.id);
+                      }}
                       className="p-1 text-gray-400 hover:text-red-600"
                     >
                       <Trash2 className="h-4 w-4" />
                     </button>
+                    <ChevronRight className="h-4 w-4 text-gray-400" />
                   </div>
                 </div>
 
