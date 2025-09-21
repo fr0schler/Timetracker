@@ -8,6 +8,7 @@
     "delete": "Löschen",
     "edit": "Bearbeiten",
     "create": "Erstellen",
+    "add": "Hinzufügen",
     "back": "Zurück",
     "next": "Weiter",
     "previous": "Zurück",
@@ -343,5 +344,71 @@
     "optimalSize": "Optimale Größe: 200x200 Pixel",
     "reset": "Zurücksetzen",
     "cropAndSave": "Zuschneiden & Speichern"
+  },
+  "tasks": {
+    "title": "Titel",
+    "description": "Beschreibung",
+    "priority": "Priorität",
+    "dueDate": "Fälligkeitsdatum",
+    "estimatedHours": "Geschätzte Stunden",
+    "assignee": "Beauftragte Person",
+    "tags": "Tags",
+    "status": "Status",
+    "createTask": "Aufgabe erstellen",
+    "createSubtask": "Teilaufgabe erstellen",
+    "editTask": "Aufgabe bearbeiten",
+    "deleteTask": "Aufgabe löschen",
+    "titlePlaceholder": "Aufgabentitel eingeben...",
+    "descriptionPlaceholder": "Beschreibung der Aufgabe eingeben...",
+    "addTag": "Tag hinzufügen",
+    "assigneeComingSoon": "Team-Zuweisung bald verfügbar",
+    "createSuccess": "Aufgabe erstellt",
+    "createSuccessMessage": "Die Aufgabe wurde erfolgreich erstellt",
+    "createError": "Fehler beim Erstellen",
+    "createErrorMessage": "Fehler beim Erstellen der Aufgabe",
+    "validation": {
+      "titleRequired": "Titel ist erforderlich",
+      "titleTooLong": "Titel ist zu lang (max. 200 Zeichen)",
+      "invalidHours": "Stunden müssen größer als 0 sein",
+      "dueDatePast": "Fälligkeitsdatum kann nicht in der Vergangenheit liegen"
+    },
+    "priority": {
+      "low": "Niedrig",
+      "normal": "Normal",
+      "high": "Hoch",
+      "urgent": "Dringend"
+    },
+    "status": {
+      "todo": "Zu erledigen",
+      "in_progress": "In Bearbeitung",
+      "done": "Erledigt",
+      "cancelled": "Abgebrochen"
+    },
+    "attachments": {
+      "title": "Anhänge",
+      "dragDrop": "Dateien hier ablegen oder klicken zum Auswählen",
+      "maxSize": "Max. Dateigröße: {size}",
+      "maxFiles": "Max. {count} Dateien",
+      "tooManyFiles": "Zu viele Dateien. Maximum: {max}",
+      "uploadError": "Fehler beim Hochladen der Datei",
+      "download": "Herunterladen",
+      "remove": "Entfernen"
+    },
+    "deleteConfirmation": "Sind Sie sicher, dass Sie diese Aufgabe löschen möchten?"
+  },
+  "richEditor": {
+    "bold": "Fett",
+    "italic": "Kursiv",
+    "underline": "Unterstrichen",
+    "bulletList": "Aufzählung",
+    "numberedList": "Nummerierte Liste",
+    "quote": "Zitat",
+    "code": "Code",
+    "insertLink": "Link einfügen",
+    "enterUrl": "URL eingeben:",
+    "edit": "Bearbeiten",
+    "preview": "Vorschau",
+    "selected": "Ausgewählt",
+    "characters": "Zeichen"
   }
 }

@@ -8,6 +8,7 @@
     "delete": "Delete",
     "edit": "Edit",
     "create": "Create",
+    "add": "Add",
     "back": "Back",
     "next": "Next",
     "previous": "Previous",
@@ -343,5 +344,71 @@
     "optimalSize": "Optimal size: 200x200 pixels",
     "reset": "Reset",
     "cropAndSave": "Crop & Save"
+  },
+  "tasks": {
+    "title": "Title",
+    "description": "Description",
+    "priority": "Priority",
+    "dueDate": "Due Date",
+    "estimatedHours": "Estimated Hours",
+    "assignee": "Assignee",
+    "tags": "Tags",
+    "status": "Status",
+    "createTask": "Create Task",
+    "createSubtask": "Create Subtask",
+    "editTask": "Edit Task",
+    "deleteTask": "Delete Task",
+    "titlePlaceholder": "Enter task title...",
+    "descriptionPlaceholder": "Enter task description...",
+    "addTag": "Add tag",
+    "assigneeComingSoon": "Team assignment coming soon",
+    "createSuccess": "Task Created",
+    "createSuccessMessage": "Task has been successfully created",
+    "createError": "Create Error",
+    "createErrorMessage": "Error creating task",
+    "validation": {
+      "titleRequired": "Title is required",
+      "titleTooLong": "Title is too long (max 200 characters)",
+      "invalidHours": "Hours must be greater than 0",
+      "dueDatePast": "Due date cannot be in the past"
+    },
+    "priority": {
+      "low": "Low",
+      "normal": "Normal",
+      "high": "High",
+      "urgent": "Urgent"
+    },
+    "status": {
+      "todo": "To Do",
+      "in_progress": "In Progress",
+      "done": "Done",
+      "cancelled": "Cancelled"
+    },
+    "attachments": {
+      "title": "Attachments",
+      "dragDrop": "Drop files here or click to select",
+      "maxSize": "Max file size: {size}",
+      "maxFiles": "Max {count} files",
+      "tooManyFiles": "Too many files. Maximum: {max}",
+      "uploadError": "Error uploading file",
+      "download": "Download",
+      "remove": "Remove"
+    },
+    "deleteConfirmation": "Are you sure you want to delete this task?"
+  },
+  "richEditor": {
+    "bold": "Bold",
+    "italic": "Italic",
+    "underline": "Underline",
+    "bulletList": "Bullet List",
+    "numberedList": "Numbered List",
+    "quote": "Quote",
+    "code": "Code",
+    "insertLink": "Insert Link",
+    "enterUrl": "Enter URL:",
+    "edit": "Edit",
+    "preview": "Preview",
+    "selected": "Selected",
+    "characters": "Characters"
   }
 }

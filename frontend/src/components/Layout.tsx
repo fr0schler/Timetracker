@@ -1,5 +1,5 @@
 import { Outlet, Link, useLocation } from 'react-router-dom';
-import { Clock, FolderOpen, List, LogOut, User, Settings } from 'lucide-react';
+import { Clock, FolderOpen, List, CheckSquare, FileText, LogOut, User, Settings } from 'lucide-react';
 import { useAuthStore } from '../store/authStore';
 
 export default function Layout() {
@@ -9,6 +9,8 @@ export default function Layout() {
   const navigation = [
     { name: 'Dashboard', href: '/', icon: Clock },
     { name: 'Projects', href: '/projects', icon: FolderOpen },
+    { name: 'Tasks', href: '/tasks', icon: CheckSquare },
+    { name: 'Templates', href: '/task-templates', icon: FileText },
     { name: 'Time Entries', href: '/time-entries', icon: List },
   ];
 

@@ -72,15 +72,16 @@
             <id>2</id>
             <name>Enhanced Task Management</name>
             <description>Verbesserte Task-Verwaltung für alle User</description>
-            <status>pending</status>
+            <status>completed</status>
             <priority>high</priority>
+            <completion_date>2025-09-21</completion_date>
             <estimated_days>8-10</estimated_days>
             <tasks>
                 <task>
                     <id>2.1</id>
                     <name>Task Creation Modal</name>
                     <description>Rich Text Editor, Attachments, Due Dates, Priority</description>
-                    <status>pending</status>
+                    <status>completed</status>
                     <files_to_create>
                         <file>frontend/src/components/Tasks/TaskCreateModal.tsx</file>
                         <file>frontend/src/components/Tasks/RichTextEditor.tsx</file>
@@ -95,7 +96,7 @@
                     <id>2.2</id>
                     <name>Kanban Board View</name>
                     <description>Drag &amp; Drop Board (TODO, IN_PROGRESS, DONE, CANCELLED)</description>
-                    <status>pending</status>
+                    <status>completed</status>
                     <files_to_create>
                         <file>frontend/src/pages/TaskBoardPage.tsx</file>
                         <file>frontend/src/components/Tasks/KanbanBoard.tsx</file>
@@ -111,7 +112,7 @@
                     <id>2.3</id>
                     <name>Task Comments &amp; Activity</name>
                     <description>Comment System mit Activity Log</description>
-                    <status>pending</status>
+                    <status>completed</status>
                     <files_to_create>
                         <file>frontend/src/components/Tasks/TaskComments.tsx</file>
                         <file>frontend/src/components/Tasks/ActivityLog.tsx</file>
@@ -127,7 +128,7 @@
                     <id>2.4</id>
                     <name>Task Templates</name>
                     <description>Wiederkehrende Aufgaben mit Vorlagen</description>
-                    <status>pending</status>
+                    <status>completed</status>
                     <files_to_create>
                         <file>frontend/src/components/Tasks/TaskTemplates.tsx</file>
                         <file>frontend/src/components/Tasks/TemplateSelector.tsx</file>
@@ -390,6 +391,41 @@
                 </task>
                 <task>
                     <id>6.4</id>
+                    <name>sevDesk API Integration</name>
+                    <description>Automatische Projekt- und Task-Erstellung aus bestätigten Angeboten</description>
+                    <status>pending</status>
+                    <requirements>
+                        <requirement>sevDesk API Anbindung für Angebotsdaten</requirement>
+                        <requirement>Bestätigte Angebote (Status: confirmed) automatisch verarbeiten</requirement>
+                        <requirement>Neues Projekt mit Kundenname aus Angebot erstellen</requirement>
+                        <requirement>Angebotspositionen werden zu Tasks konvertiert</requirement>
+                        <requirement>Verkaufte Zeit aus Position wird estimated_hours der Task</requirement>
+                        <requirement>Automatische Synchronisation bei Angebots-Bestätigung</requirement>
+                    </requirements>
+                    <files_to_create>
+                        <file>backend/src/services/sevdesk_integration.py</file>
+                        <file>backend/src/models/sevdesk_sync.py</file>
+                        <file>frontend/src/pages/sevDeskIntegrationPage.tsx</file>
+                        <file>frontend/src/components/Integration/sevDeskSettings.tsx</file>
+                    </files_to_create>
+                    <backend_changes>
+                        <service>sevDesk API client service</service>
+                        <endpoint>POST /api/v1/integrations/sevdesk/sync</endpoint>
+                        <endpoint>GET /api/v1/integrations/sevdesk/status</endpoint>
+                        <endpoint>PUT /api/v1/integrations/sevdesk/settings</endpoint>
+                        <model>Create sevDeskIntegration model</model>
+                        <webhook>sevDesk webhook for offer confirmations</webhook>
+                    </backend_changes>
+                    <workflow>
+                        <step>1. sevDesk sendet Webhook bei bestätigtem Angebot</step>
+                        <step>2. System erstellt automatisch neues Projekt (Name: Kundenname)</step>
+                        <step>3. Angebotspositionen werden zu Tasks konvertiert</step>
+                        <step>4. Verkaufte Stunden werden als estimated_hours gesetzt</step>
+                        <step>5. Projekt wird dem entsprechenden Team zugewiesen</step>
+                    </workflow>
+                </task>
+                <task>
+                    <id>6.5</id>
                     <name>Auto-Suggestions</name>
                     <description>Pattern-basierte Time Entry Vorschläge</description>
                     <status>pending</status>
@@ -457,8 +493,8 @@
 
     <implementation_notes>
         <current_status>
-            <phase_in_progress>Phase 1 COMPLETED - Ready to start Phase 2</phase_in_progress>
-            <next_milestone>Complete Phase 2: Enhanced Task Management</next_milestone>
+            <phase_in_progress>Phase 2 COMPLETED - Ready to start Phase 3</phase_in_progress>
+            <next_milestone>Complete Phase 3: Organization &amp; Team Management</next_milestone>
             <completed_phases>
                 <phase id="1" name="User Profile &amp; Settings" completed_date="2025-09-21">
                     <achievements>
@@ -474,6 +510,26 @@
                         <achievement>✅ Mobile-responsive design maintained</achievement>
                         <achievement>✅ BUILD VERIFICATION PASSED - All TypeScript errors resolved</achievement>
                         <achievement>✅ Production build successful (438.69 KB bundle, 128.97 KB gzipped)</achievement>
+                        <achievement>✅ PWA integration maintained</achievement>
+                    </achievements>
+                </phase>
+                <phase id="2" name="Enhanced Task Management" completed_date="2025-09-21">
+                    <achievements>
+                        <achievement>✅ Task Creation Modal with Rich Text Editor and file attachments</achievement>
+                        <achievement>✅ Task Board/Kanban View with drag & drop functionality (@hello-pangea/dnd)</achievement>
+                        <achievement>✅ 4-column Kanban board (TODO, IN_PROGRESS, DONE, CANCELLED)</achievement>
+                        <achievement>✅ Task Detail Modal with tabbed interface (Details/Comments/Activity)</achievement>
+                        <achievement>✅ Comprehensive Comment System with threaded replies</achievement>
+                        <achievement>✅ Activity Log with timeline visualization and field change tracking</achievement>
+                        <achievement>✅ Task Templates system for recurring tasks</achievement>
+                        <achievement>✅ Template Creation/Edit/Delete with rich text descriptions</achievement>
+                        <achievement>✅ Template Selector modal integrated into task creation</achievement>
+                        <achievement>✅ Dedicated Task Templates management page</achievement>
+                        <achievement>✅ Complete task management workflow (Create → Board → Details → Comments → Activity)</achievement>
+                        <achievement>✅ Mobile-responsive design for all new components</achievement>
+                        <achievement>✅ Complete internationalization maintained</achievement>
+                        <achievement>✅ BUILD VERIFICATION PASSED - All TypeScript errors resolved</achievement>
+                        <achievement>✅ Production build successful (624.80 KB bundle, 178.66 KB gzipped)</achievement>
                         <achievement>✅ PWA integration maintained</achievement>
                     </achievements>
                 </phase>

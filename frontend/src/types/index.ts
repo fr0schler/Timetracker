@@ -16,8 +16,11 @@ export interface Project {
   description?: string;
   color: string;
   is_active: boolean;
-  user_id: number;
+  is_billable?: boolean;
+  hourly_rate?: number;
+  user_id?: number;
   created_at: string;
+  updated_at: string;
 }
 
 export interface TimeEntry {
@@ -85,9 +88,15 @@ export interface Task {
   project_id: number;
   parent_id?: number;
   estimated_hours?: number;
+  due_date?: string;
+  assigned_to_id?: number;
+  created_by_id: number;
   created_at: string;
   updated_at: string;
   subtasks: Task[];
+  attachments?: TaskAttachment[];
+  comments?: TaskComment[];
+  tags?: string[];
 }
 
 export interface CreateTask {
@@ -96,6 +105,9 @@ export interface CreateTask {
   priority?: 'low' | 'normal' | 'high' | 'urgent';
   parent_id?: number;
   estimated_hours?: number;
+  due_date?: string;
+  assigned_to_id?: number;
+  tags?: string[];
 }
 
 export interface UpdateTask {
@@ -105,6 +117,73 @@ export interface UpdateTask {
   priority?: 'low' | 'normal' | 'high' | 'urgent';
   parent_id?: number;
   estimated_hours?: number;
+  due_date?: string;
+  assigned_to_id?: number;
+  tags?: string[];
+}
+
+// Task Attachment types
+export interface TaskAttachment {
+  id: number;
+  filename: string;
+  original_name: string;
+  file_size: number;
+  mime_type: string;
+  file_url: string;
+  uploaded_by_id: number;
+  uploaded_at: string;
+}
+
+// Task Comment types
+export interface TaskComment {
+  id: number;
+  content: string;
+  created_by_id: number;
+  parent_id?: number;
+  created_at: string;
+  updated_at: string;
+}
+
+export interface CreateTaskComment {
+  content: string;
+}
+
+// Task Template types
+export interface TaskTemplate {
+  id: number;
+  name: string;
+  description?: string;
+  title_template: string;
+  description_template?: string;
+  priority: 'low' | 'normal' | 'high' | 'urgent';
+  estimated_hours?: number;
+  tags?: string[];
+  organization_id: number;
+  created_by_id: number;
+  created_at: string;
+}
+
+export interface CreateTaskTemplate {
+  name: string;
+  description?: string;
+  title_template: string;
+  description_template?: string;
+  priority?: 'low' | 'normal' | 'high' | 'urgent';
+  estimated_hours?: number;
+  tags?: string[];
+}
+
+// Task Activity types
+export interface TaskActivity {
+  id: number;
+  task_id: number;
+  user_id: number;
+  action: 'created' | 'updated' | 'added' | 'removed' | 'deleted';
+  field: string | null;
+  old_value: string | null;
+  new_value: string | null;
+  description: string;
+  created_at: string;
 }
 
 // Subscription-related types
