@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { PhotoIcon, SwatchIcon } from '@heroicons/react/24/outline';
+import { Image, Palette } from 'lucide-react';
 import { useToastStore } from '../../store/toastStore';
 
 interface OrganizationSettings {
@@ -50,13 +50,13 @@ const BrandingSettings: React.FC<BrandingSettingsProps> = ({ organization, onUpd
 
     // Validate file type
     if (!file.type.startsWith('image/')) {
-      addToast(t('branding.logoInvalidType'), 'error');
+      addToast('error', t('branding.logoInvalidType'));
       return;
     }
 
     // Validate file size (max 5MB)
     if (file.size > 5 * 1024 * 1024) {
-      addToast(t('branding.logoTooLarge'), 'error');
+      addToast('error', t('branding.logoTooLarge'));
       return;
     }
 
@@ -139,7 +139,7 @@ const BrandingSettings: React.FC<BrandingSettingsProps> = ({ organization, onUpd
                     className="w-20 h-20 object-contain rounded-lg"
                   />
                 ) : (
-                  <PhotoIcon className="h-10 w-10 text-gray-400" />
+                  <Image className="h-10 w-10 text-gray-400" />
                 )}
               </div>
             </div>
@@ -224,7 +224,7 @@ const BrandingSettings: React.FC<BrandingSettingsProps> = ({ organization, onUpd
                     onChange={(e) => handleColorChange(e.target.value)}
                     className="w-12 h-12 border border-gray-300 dark:border-gray-600 rounded-lg cursor-pointer"
                   />
-                  <SwatchIcon className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 h-6 w-6 text-white pointer-events-none" />
+                  <Palette className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 h-6 w-6 text-white pointer-events-none" />
                 </div>
                 <input
                   type="text"

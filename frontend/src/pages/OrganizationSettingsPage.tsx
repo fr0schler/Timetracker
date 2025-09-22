@@ -1,15 +1,15 @@
 import React, { useState, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import {
-  BuildingOfficeIcon,
-  PaintBrushIcon,
-  CreditCardIcon,
-  UsersIcon,
-  CogIcon
-} from '@heroicons/react/24/outline';
+  Building,
+  Palette,
+  CreditCard,
+  Users,
+  Settings
+} from 'lucide-react';
 import { useToastStore } from '../store/toastStore';
 import BrandingSettings from '../components/Organization/BrandingSettings';
-import { api } from '../services/api';
+import api from '../services/api';
 
 interface OrganizationSettings {
   id: number;
@@ -43,7 +43,7 @@ const OrganizationSettingsPage: React.FC = () => {
       setOrganization(response.data);
     } catch (error) {
       console.error('Error loading organization settings:', error);
-      addToast(t('organization.loadError'), 'error');
+      addToast('error', t('organization.loadError'));
     } finally {
       setLoading(false);
     }
@@ -55,10 +55,10 @@ const OrganizationSettingsPage: React.FC = () => {
     try {
       const response = await api.put('/api/v1/organizations/settings', updates);
       setOrganization(response.data);
-      addToast(t('organization.updateSuccess'), 'success');
+      addToast('success', t('organization.updateSuccess'));
     } catch (error: any) {
       const message = error.response?.data?.detail || t('organization.updateError');
-      addToast(message, 'error');
+      addToast('error', message);
       throw error;
     }
   };
@@ -67,25 +67,25 @@ const OrganizationSettingsPage: React.FC = () => {
     {
       id: 'general',
       name: t('organization.generalSettings'),
-      icon: BuildingOfficeIcon,
+      icon: Building,
       current: activeTab === 'general'
     },
     {
       id: 'branding',
       name: t('organization.branding'),
-      icon: PaintBrushIcon,
+      icon: Palette,
       current: activeTab === 'branding'
     },
     {
       id: 'subscription',
       name: t('organization.subscription'),
-      icon: CreditCardIcon,
+      icon: CreditCard,
       current: activeTab === 'subscription'
     },
     {
       id: 'members',
       name: t('organization.members'),
-      icon: UsersIcon,
+      icon: Users,
       current: activeTab === 'members'
     }
   ];
@@ -110,7 +110,7 @@ const OrganizationSettingsPage: React.FC = () => {
     <div className="max-w-6xl mx-auto p-6">
       {/* Header */}
       <div className="flex items-center space-x-3 mb-8">
-        <CogIcon className="h-8 w-8 text-blue-600" />
+        <Settings className="h-8 w-8 text-blue-600" />
         <div>
           <h1 className="text-2xl font-bold text-gray-900 dark:text-white">
             {t('organization.settings')}
@@ -133,7 +133,7 @@ const OrganizationSettingsPage: React.FC = () => {
                   className="w-12 h-12 rounded-lg object-cover"
                 />
               ) : (
-                <BuildingOfficeIcon className="h-8 w-8 text-blue-600" />
+                <Building className="h-8 w-8 text-blue-600" />
               )}
             </div>
             <div>
@@ -333,7 +333,7 @@ const SubscriptionSettings: React.FC<{ organization: OrganizationSettings }> = (
 
       <div className="p-6">
         <div className="text-center py-8">
-          <CreditCardIcon className="h-12 w-12 text-gray-400 mx-auto mb-4" />
+          <CreditCard className="h-12 w-12 text-gray-400 mx-auto mb-4" />
           <h3 className="text-lg font-medium text-gray-900 dark:text-white mb-2">
             {t('organization.subscriptionManagement')}
           </h3>
@@ -350,7 +350,7 @@ const SubscriptionSettings: React.FC<{ organization: OrganizationSettings }> = (
 };
 
 // Members Settings Component
-const MembersSettings: React.FC<{ organization: OrganizationSettings }> = ({ organization }) => {
+const MembersSettings: React.FC<{ organization: OrganizationSettings }> = () => {
   const { t } = useTranslation();
 
   return (
@@ -366,7 +366,7 @@ const MembersSettings: React.FC<{ organization: OrganizationSettings }> = ({ org
 
       <div className="p-6">
         <div className="text-center py-8">
-          <UsersIcon className="h-12 w-12 text-gray-400 mx-auto mb-4" />
+          <Users className="h-12 w-12 text-gray-400 mx-auto mb-4" />
           <h3 className="text-lg font-medium text-gray-900 dark:text-white mb-2">
             {t('organization.teamManagement')}
           </h3>
