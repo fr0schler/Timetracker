@@ -7,6 +7,7 @@ from sqlalchemy.ext.asyncio import AsyncSession
 from ...core.config import settings
 from ...core.database import get_db
 from ...models.user import User
+from ...models.organization import Organization
 from ...services.user_service import UserService
 from ...schemas.token import TokenData
 
@@ -46,3 +47,16 @@ async def get_current_active_user(
     if not current_user.is_active:
         raise HTTPException(status_code=400, detail="Inactive user")
     return current_user
+
+
+async def get_current_organization(
+    current_user: User = Depends(get_current_user),
+) -> Organization:
+    """Get the current user's organization"""
+    organization = current_user.current_organization
+    if not organization:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail="User is not associated with any organization"
+        )
+    return organization

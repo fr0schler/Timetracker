@@ -1,7 +1,7 @@
 """Add user invitations table
 
 Revision ID: 004_user_invitations
-Revises: 003_tasks_and_stripe
+Revises: 003
 Create Date: 2025-09-22 10:00:00.000000
 
 """
@@ -11,7 +11,7 @@ import sqlalchemy as sa
 
 # revision identifiers, used by Alembic.
 revision = '004_user_invitations'
-down_revision = '003_tasks_and_stripe'
+down_revision = '003'
 branch_labels = None
 depends_on = None
 

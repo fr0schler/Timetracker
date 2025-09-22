@@ -3,7 +3,7 @@ from fastapi import APIRouter, Depends, HTTPException, status
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from ....core.database import get_db
-from ....core.deps import get_current_user, get_current_organization
+from ..deps import get_current_user, get_current_organization
 from ....models.user import User
 from ....models.organization import Organization
 from ....models.organization_member import MemberRole
