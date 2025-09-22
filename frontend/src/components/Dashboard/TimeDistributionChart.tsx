@@ -5,8 +5,7 @@ import {
   Pie,
   Cell,
   ResponsiveContainer,
-  Tooltip,
-  Legend
+  Tooltip
 } from 'recharts';
 import { TimeEntry } from '../../types';
 import { Project } from '../../types';

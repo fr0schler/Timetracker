@@ -31,19 +31,21 @@ const EnhancedLayout: React.FC = () => {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
   const navigation = [
-    { name: t('navigation.dashboard'), href: '/', icon: Clock },
+    { name: t('navigation.dashboard'), href: '/dashboard', icon: Clock },
+    { name: 'Advanced Dashboard', href: '/advanced-dashboard', icon: BarChart3 },
     { name: t('navigation.projects'), href: '/projects', icon: FolderOpen },
     { name: t('navigation.tasks'), href: '/tasks', icon: CheckSquare },
     { name: 'Templates', href: '/task-templates', icon: FileText },
     { name: t('navigation.team'), href: '/team', icon: Users },
     { name: 'Analytics', href: '/analytics', icon: BarChart3 },
     { name: t('navigation.reports'), href: '/reports', icon: Download },
+    { name: 'Export', href: '/export', icon: Download },
     { name: t('navigation.timeEntries'), href: '/time-entries', icon: List },
   ];
 
   const isActive = (href: string) => {
-    if (href === '/') {
-      return location.pathname === '/';
+    if (href === '/dashboard') {
+      return location.pathname === '/dashboard' || location.pathname === '/';
     }
     return location.pathname.startsWith(href);
   };

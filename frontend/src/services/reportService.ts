@@ -1,5 +1,4 @@
 import api from './api';
-import { ReportFilters } from '../components/Reports/ReportGenerator';
 
 export type ReportType = 'time-tracking' | 'project-summary' | 'user-activity';
 
@@ -13,7 +12,7 @@ export interface ReportResult {
 class ReportService {
   async generateReport(
     type: ReportType,
-    filters: ReportFilters,
+    filters: any,
     format: string
   ): Promise<ReportResult> {
     try {

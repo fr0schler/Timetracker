@@ -35,6 +35,8 @@ export interface TimeEntry {
   created_at: string;
   is_running: boolean;
   duration_seconds: number;
+  is_billable?: boolean;
+  hourly_rate?: number;
 }
 
 export interface CreateProject {

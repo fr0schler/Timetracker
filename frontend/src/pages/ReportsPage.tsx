@@ -2,14 +2,12 @@ import React, { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { DocumentTextIcon, ArrowDownTrayIcon, CalendarIcon, ClockIcon } from '@heroicons/react/24/outline';
 import ReportGenerator from '../components/Reports/ReportGenerator';
-import { reportService, ReportType } from '../services/reportService';
-import { useToastStore } from '../store/toastStore';
+import { ReportType } from '../services/reportService';
 
 const ReportsPage: React.FC = () => {
   const { t } = useTranslation();
-  const { addToast } = useToastStore();
   const [selectedReport, setSelectedReport] = useState<ReportType>('time-tracking');
-  const [isGenerating, setIsGenerating] = useState(false);
+  const [isGenerating] = useState(false);
 
   const reportTypes = [
     {
@@ -32,37 +30,37 @@ const ReportsPage: React.FC = () => {
     },
   ];
 
-  const handleGenerateReport = async (filters: any, format: string) => {
-    try {
-      setIsGenerating(true);
-      const result = await reportService.generateReport(selectedReport, filters, format);
+  // const handleGenerateReport = async (filters: any, format: string) => {
+  //   try {
+  //     setIsGenerating(true);
+  //     const result = await reportService.generateReport(selectedReport, filters, format);
 
-      if (result.downloadUrl) {
-        // Create download link
-        const link = document.createElement('a');
-        link.href = result.downloadUrl;
-        link.download = result.filename;
-        document.body.appendChild(link);
-        link.click();
-        document.body.removeChild(link);
+  //     if (result.downloadUrl) {
+  //       // Create download link
+  //       const link = document.createElement('a');
+  //       link.href = result.downloadUrl;
+  //       link.download = result.filename;
+  //       document.body.appendChild(link);
+  //       link.click();
+  //       document.body.removeChild(link);
 
-        addToast(
-          'success',
-          t('reports.success'),
-          t('reports.reportGenerated')
-        );
-      }
-    } catch (error) {
-      console.error('Failed to generate report:', error);
-      addToast(
-        'error',
-        t('reports.error'),
-        t('reports.generationFailed')
-      );
-    } finally {
-      setIsGenerating(false);
-    }
-  };
+  //       addToast(
+  //         'success',
+  //         t('reports.success'),
+  //         t('reports.reportGenerated')
+  //       );
+  //     }
+  //   } catch (error) {
+  //     console.error('Failed to generate report:', error);
+  //     addToast(
+  //       'error',
+  //       t('reports.error'),
+  //       t('reports.generationFailed')
+  //     );
+  //   } finally {
+  //     setIsGenerating(false);
+  //   }
+  // };
 
   return (
     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
@@ -141,11 +139,7 @@ const ReportsPage: React.FC = () => {
               )}
             </div>
 
-            <ReportGenerator
-              reportType={selectedReport}
-              onGenerate={handleGenerateReport}
-              isGenerating={isGenerating}
-            />
+            <ReportGenerator />
           </div>
         </div>
       </div>

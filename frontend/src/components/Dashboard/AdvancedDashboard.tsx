@@ -1,30 +1,22 @@
 import React, { useState, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import {
-  Calendar,
-  Clock,
   TrendingUp,
-  TrendingDown,
-  Users,
-  Target,
   Activity,
   BarChart3,
   PieChart,
   Settings,
   RefreshCw,
-  Download,
-  Filter
+  Download
 } from 'lucide-react';
 import { useTimeEntryStore } from '../../store/timeEntryStore';
 import { useProjectStore } from '../../store/projectStore';
-import { useAuthStore } from '../../store/authStore';
 import DashboardWidget from './DashboardWidget';
 import TimeDistributionChart from './TimeDistributionChart';
 import ProductivityTrends from './ProductivityTrends';
 import ProjectPerformanceChart from './ProjectPerformanceChart';
 import RecentActivityWidget from './RecentActivityWidget';
 import QuickStatsWidget from './QuickStatsWidget';
-import { formatDuration } from '../../utils/timeUtils';
 
 interface DashboardConfig {
   widgets: string[];
@@ -36,7 +28,6 @@ const AdvancedDashboard: React.FC = () => {
   const { t } = useTranslation();
   const { timeEntries, fetchTimeEntries } = useTimeEntryStore();
   const { projects, fetchProjects } = useProjectStore();
-  const { user } = useAuthStore();
 
   const [config, setConfig] = useState<DashboardConfig>({
     widgets: ['stats', 'productivity', 'distribution', 'projects', 'activity'],

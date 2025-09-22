@@ -20,6 +20,8 @@ import AnalyticsPage from './pages/AnalyticsPage';
 import ReportsPage from './pages/ReportsPage';
 import ProjectTemplatesPage from './pages/ProjectTemplatesPage';
 import APIKeysPage from './pages/APIKeysPage';
+import AdvancedDashboardPage from './pages/AdvancedDashboardPage';
+import ExportPage from './pages/ExportPage';
 import EnhancedLayout from './components/Layout/EnhancedLayout';
 import ProtectedRoute from './components/ProtectedRoute';
 import TimerDescriptionDialog from './components/TimerDescriptionDialog';
@@ -213,6 +215,28 @@ function App() {
           }
         >
           <Route index element={<APIKeysPage />} />
+        </Route>
+
+        <Route
+          path="/advanced-dashboard"
+          element={
+            <ProtectedRoute>
+              <EnhancedLayout />
+            </ProtectedRoute>
+          }
+        >
+          <Route index element={<AdvancedDashboardPage />} />
+        </Route>
+
+        <Route
+          path="/export"
+          element={
+            <ProtectedRoute>
+              <EnhancedLayout />
+            </ProtectedRoute>
+          }
+        >
+          <Route index element={<ExportPage />} />
         </Route>
 
         {/* Catch all route */}

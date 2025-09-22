@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import { ChartBarIcon, ClockIcon, UserGroupIcon, CursorArrowRaysIcon } from '@heroicons/react/24/outline';
+import AnalyticsEngine from '../components/Analytics/AnalyticsEngine';
 import UsageCharts from '../components/Analytics/UsageCharts';
 import TimeTrackingMetrics from '../components/Analytics/TimeTrackingMetrics';
 import { useAuthStore } from '../store/authStore';
@@ -109,31 +110,38 @@ const AnalyticsPage: React.FC = () => {
 
   return (
     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-      {/* Header */}
+      {/* Advanced Analytics Engine */}
       <div className="mb-8">
-        <div className="sm:flex sm:items-center sm:justify-between">
-          <div>
-            <h1 className="text-2xl font-bold text-gray-900 dark:text-gray-100">
-              {t('analytics.title')}
-            </h1>
-            <p className="mt-2 text-sm text-gray-600 dark:text-gray-400">
-              {t('analytics.subtitle')}
-            </p>
-          </div>
-          <div className="mt-4 sm:mt-0">
-            <select
-              value={timeRange}
-              onChange={(e) => setTimeRange(e.target.value)}
-              className="block rounded-md border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 shadow-sm focus:border-primary-500 focus:ring-primary-500 sm:text-sm"
-            >
-              <option value="7d">{t('analytics.timeRange.7d')}</option>
-              <option value="30d">{t('analytics.timeRange.30d')}</option>
-              <option value="90d">{t('analytics.timeRange.90d')}</option>
-              <option value="1y">{t('analytics.timeRange.1y')}</option>
-            </select>
+        <AnalyticsEngine />
+      </div>
+
+      {/* Legacy Analytics - keeping for compatibility */}
+      <div className="space-y-8">
+        {/* Header */}
+        <div className="mb-8">
+          <div className="sm:flex sm:items-center sm:justify-between">
+            <div>
+              <h2 className="text-xl font-bold text-gray-900 dark:text-gray-100">
+                {t('analytics.title')} - Legacy View
+              </h2>
+              <p className="mt-2 text-sm text-gray-600 dark:text-gray-400">
+                {t('analytics.subtitle')}
+              </p>
+            </div>
+            <div className="mt-4 sm:mt-0">
+              <select
+                value={timeRange}
+                onChange={(e) => setTimeRange(e.target.value)}
+                className="block rounded-md border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 shadow-sm focus:border-primary-500 focus:ring-primary-500 sm:text-sm"
+              >
+                <option value="7d">{t('analytics.timeRange.7d')}</option>
+                <option value="30d">{t('analytics.timeRange.30d')}</option>
+                <option value="90d">{t('analytics.timeRange.90d')}</option>
+                <option value="1y">{t('analytics.timeRange.1y')}</option>
+              </select>
+            </div>
           </div>
         </div>
-      </div>
 
       {/* Stats */}
       <div className="mb-8">
@@ -229,6 +237,7 @@ const AnalyticsPage: React.FC = () => {
           </div>
         </div>
       )}
+      </div>
     </div>
   );
 };

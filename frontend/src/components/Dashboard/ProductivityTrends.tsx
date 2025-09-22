@@ -1,7 +1,6 @@
 import React from 'react';
 import { useTranslation } from 'react-i18next';
 import {
-  LineChart,
   Line,
   XAxis,
   YAxis,
@@ -11,7 +10,6 @@ import {
   Area,
   AreaChart,
   Bar,
-  BarChart,
   ComposedChart
 } from 'recharts';
 import { TimeEntry } from '../../types';
