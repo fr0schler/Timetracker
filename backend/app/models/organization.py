@@ -39,6 +39,7 @@ class Organization(Base):
     projects = relationship("Project", back_populates="organization", cascade="all, delete-orphan")
     tasks = relationship("Task", back_populates="organization", cascade="all, delete-orphan")
     time_entries = relationship("TimeEntry", back_populates="organization", cascade="all, delete-orphan")
+    invitations = relationship("UserInvitation", back_populates="organization", cascade="all, delete-orphan")
 
     @property
     def is_subscription_active(self) -> bool:

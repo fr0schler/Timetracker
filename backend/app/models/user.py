@@ -27,6 +27,7 @@ class User(Base):
     assigned_tasks = relationship("Task", foreign_keys="Task.assigned_to_id", back_populates="assigned_to")
     created_tasks = relationship("Task", foreign_keys="Task.created_by_id", back_populates="created_by")
     time_entries = relationship("TimeEntry", back_populates="user", cascade="all, delete-orphan")
+    sent_invitations = relationship("UserInvitation", back_populates="invited_by", cascade="all, delete-orphan")
 
     @property
     def current_organization(self):

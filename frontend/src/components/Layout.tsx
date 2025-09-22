@@ -1,5 +1,5 @@
 import { Outlet, Link, useLocation } from 'react-router-dom';
-import { Clock, FolderOpen, List, CheckSquare, FileText, Users, LogOut, User, Settings } from 'lucide-react';
+import { Clock, FolderOpen, List, CheckSquare, FileText, Users, LogOut, User, Settings, Building } from 'lucide-react';
 import { useAuthStore } from '../store/authStore';
 
 export default function Layout() {
@@ -64,8 +64,16 @@ export default function Layout() {
                 <span>{user?.full_name || user?.email}</span>
               </Link>
               <Link
+                to="/organization"
+                className="text-gray-400 hover:text-gray-500 dark:hover:text-gray-300"
+                title="Organization Settings"
+              >
+                <Building className="h-5 w-5" />
+              </Link>
+              <Link
                 to="/settings"
                 className="text-gray-400 hover:text-gray-500 dark:hover:text-gray-300"
+                title="Personal Settings"
               >
                 <Settings className="h-5 w-5" />
               </Link>

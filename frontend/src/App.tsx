@@ -15,6 +15,7 @@ import TaskTemplatesPage from './pages/TaskTemplatesPage';
 import TeamManagementPage from './pages/TeamManagementPage';
 import UserProfilePage from './pages/UserProfilePage';
 import SettingsPage from './pages/SettingsPage';
+import OrganizationSettingsPage from './pages/OrganizationSettingsPage';
 import Layout from './components/Layout';
 import ProtectedRoute from './components/ProtectedRoute';
 import CommandPalette from './components/CommandPalette';
@@ -153,6 +154,17 @@ function App() {
           }
         >
           <Route index element={<SettingsPage />} />
+        </Route>
+
+        <Route
+          path="/organization"
+          element={
+            <ProtectedRoute>
+              <Layout />
+            </ProtectedRoute>
+          }
+        >
+          <Route index element={<OrganizationSettingsPage />} />
         </Route>
 
         {/* Catch all route */}
