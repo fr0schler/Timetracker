@@ -7,6 +7,7 @@ export interface User {
   avatar_url?: string;
   bio?: string;
   timezone?: string;
+  is_organization_owner?: boolean;
   created_at: string;
 }
 

@@ -16,11 +16,15 @@ import TeamManagementPage from './pages/TeamManagementPage';
 import UserProfilePage from './pages/UserProfilePage';
 import SettingsPage from './pages/SettingsPage';
 import OrganizationSettingsPage from './pages/OrganizationSettingsPage';
-import Layout from './components/Layout';
+import AnalyticsPage from './pages/AnalyticsPage';
+import ReportsPage from './pages/ReportsPage';
+import ProjectTemplatesPage from './pages/ProjectTemplatesPage';
+import APIKeysPage from './pages/APIKeysPage';
+import EnhancedLayout from './components/Layout/EnhancedLayout';
 import ProtectedRoute from './components/ProtectedRoute';
-import CommandPalette from './components/CommandPalette';
 import TimerDescriptionDialog from './components/TimerDescriptionDialog';
 import ToastContainer from './components/ToastContainer';
+import ThemeProvider from './providers/ThemeProvider';
 
 function App() {
   const { loadUser, isAuthenticated, isLoading } = useAuthStore();
@@ -60,7 +64,7 @@ function App() {
   const showLandingPage = !isAuthenticated && location.pathname === '/';
 
   return (
-    <>
+    <ThemeProvider>
       <Routes>
         {/* Public Routes */}
         <Route path="/" element={showLandingPage ? <LandingPage /> : <Navigate to="/dashboard" replace />} />
@@ -72,7 +76,7 @@ function App() {
           path="/dashboard"
           element={
             <ProtectedRoute>
-              <Layout />
+              <EnhancedLayout />
             </ProtectedRoute>
           }
         >
@@ -83,7 +87,7 @@ function App() {
           path="/projects"
           element={
             <ProtectedRoute>
-              <Layout />
+              <EnhancedLayout />
             </ProtectedRoute>
           }
         >
@@ -94,7 +98,7 @@ function App() {
           path="/time-entries"
           element={
             <ProtectedRoute>
-              <Layout />
+              <EnhancedLayout />
             </ProtectedRoute>
           }
         >
@@ -105,7 +109,7 @@ function App() {
           path="/profile"
           element={
             <ProtectedRoute>
-              <Layout />
+              <EnhancedLayout />
             </ProtectedRoute>
           }
         >
@@ -116,7 +120,7 @@ function App() {
           path="/tasks"
           element={
             <ProtectedRoute>
-              <Layout />
+              <EnhancedLayout />
             </ProtectedRoute>
           }
         >
@@ -127,7 +131,7 @@ function App() {
           path="/task-templates"
           element={
             <ProtectedRoute>
-              <Layout />
+              <EnhancedLayout />
             </ProtectedRoute>
           }
         >
@@ -138,7 +142,7 @@ function App() {
           path="/team"
           element={
             <ProtectedRoute>
-              <Layout />
+              <EnhancedLayout />
             </ProtectedRoute>
           }
         >
@@ -149,7 +153,7 @@ function App() {
           path="/settings"
           element={
             <ProtectedRoute>
-              <Layout />
+              <EnhancedLayout />
             </ProtectedRoute>
           }
         >
@@ -160,11 +164,55 @@ function App() {
           path="/organization"
           element={
             <ProtectedRoute>
-              <Layout />
+              <EnhancedLayout />
             </ProtectedRoute>
           }
         >
           <Route index element={<OrganizationSettingsPage />} />
+        </Route>
+
+        <Route
+          path="/analytics"
+          element={
+            <ProtectedRoute>
+              <EnhancedLayout />
+            </ProtectedRoute>
+          }
+        >
+          <Route index element={<AnalyticsPage />} />
+        </Route>
+
+        <Route
+          path="/reports"
+          element={
+            <ProtectedRoute>
+              <EnhancedLayout />
+            </ProtectedRoute>
+          }
+        >
+          <Route index element={<ReportsPage />} />
+        </Route>
+
+        <Route
+          path="/project-templates"
+          element={
+            <ProtectedRoute>
+              <EnhancedLayout />
+            </ProtectedRoute>
+          }
+        >
+          <Route index element={<ProjectTemplatesPage />} />
+        </Route>
+
+        <Route
+          path="/api-keys"
+          element={
+            <ProtectedRoute>
+              <EnhancedLayout />
+            </ProtectedRoute>
+          }
+        >
+          <Route index element={<APIKeysPage />} />
         </Route>
 
         {/* Catch all route */}
@@ -175,7 +223,6 @@ function App() {
       </Routes>
 
       {/* Global Components */}
-      {isAuthenticated && <CommandPalette />}
 
       {/* Timer Description Dialog */}
       {pendingTimeEntry && (
@@ -190,7 +237,7 @@ function App() {
 
       {/* Toast Notifications */}
       <ToastContainer toasts={toasts} onRemoveToast={removeToast} />
-    </>
+    </ThemeProvider>
   );
 }
 

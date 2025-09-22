@@ -1,5 +1,5 @@
 import { Outlet, Link, useLocation } from 'react-router-dom';
-import { Clock, FolderOpen, List, CheckSquare, FileText, Users, LogOut, User, Settings, Building } from 'lucide-react';
+import { Clock, FolderOpen, List, CheckSquare, FileText, Users, LogOut, User, Settings, Building, BarChart3, Download, Key } from 'lucide-react';
 import { useAuthStore } from '../store/authStore';
 
 export default function Layout() {
@@ -12,6 +12,8 @@ export default function Layout() {
     { name: 'Tasks', href: '/tasks', icon: CheckSquare },
     { name: 'Templates', href: '/task-templates', icon: FileText },
     { name: 'Team', href: '/team', icon: Users },
+    { name: 'Analytics', href: '/analytics', icon: BarChart3 },
+    { name: 'Reports', href: '/reports', icon: Download },
     { name: 'Time Entries', href: '/time-entries', icon: List },
   ];
 
@@ -69,6 +71,13 @@ export default function Layout() {
                 title="Organization Settings"
               >
                 <Building className="h-5 w-5" />
+              </Link>
+              <Link
+                to="/api-keys"
+                className="text-gray-400 hover:text-gray-500 dark:hover:text-gray-300"
+                title="API Keys"
+              >
+                <Key className="h-5 w-5" />
               </Link>
               <Link
                 to="/settings"
