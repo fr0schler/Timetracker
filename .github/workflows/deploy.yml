@@ -126,6 +126,11 @@ jobs:
 
           # Backend Configuration
           SECRET_KEY=your-very-secure-secret-key-change-this-in-production
+          ACCESS_TOKEN_EXPIRE_MINUTES=1440
+          SESSION_EXPIRE_SECONDS=86400
+
+          # Redis Configuration
+          REDIS_URL=redis://redis:6379
 
           # Domain Configuration
           FRONTEND_DOMAIN=timetracker.hkp-solutions.de
@@ -145,12 +150,44 @@ jobs:
           export FRONTEND_IMAGE=ghcr.io/fr0schler/timetracker-frontend:main
           export BACKEND_IMAGE=ghcr.io/fr0schler/timetracker-backend:main
 
-          # Stop and recreate containers with new images (remove volumes to reset DB)
-          echo "🛑 Stopping containers and removing volumes..."
-          docker compose -f docker-compose.prod.yml down -v || true
+          # Zero-downtime deployment strategy
+          echo "🔄 Performing zero-downtime deployment..."
 
-          echo "🚀 Starting containers..."
-          docker compose -f docker-compose.prod.yml up -d
+          # Start new containers alongside old ones (if they exist)
+          docker compose -f docker-compose.prod.yml pull
+
+          # Start database and Redis first if not running
+          docker compose -f docker-compose.prod.yml up -d db redis
+
+          # Wait for database and Redis to be ready
+          echo "⏳ Waiting for database and Redis..."
+          sleep 15
+
+          # Deploy backend with rolling update
+          echo "🔄 Updating backend..."
+          docker compose -f docker-compose.prod.yml up -d backend --no-deps
+
+          # Wait for backend to be ready
+          echo "⏳ Waiting for backend to be ready..."
+          sleep 10
+
+          # Test backend health
+          for i in {1..30}; do
+            if curl -f http://localhost:8000/health >/dev/null 2>&1; then
+              echo "✅ Backend is healthy"
+              break
+            fi
+            echo "🔄 Waiting for backend... ($i/30)"
+            sleep 2
+          done
+
+          # Deploy frontend
+          echo "🔄 Updating frontend..."
+          docker compose -f docker-compose.prod.yml up -d frontend --no-deps
+
+          # Wait for frontend to be ready
+          echo "⏳ Waiting for frontend to be ready..."
+          sleep 5
 
           echo "⏳ Waiting for containers to be ready..."
           sleep 10

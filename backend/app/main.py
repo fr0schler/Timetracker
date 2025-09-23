@@ -1,8 +1,9 @@
-from fastapi import FastAPI
+from fastapi import FastAPI, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
 from .api.v1 import api_router
 from .core.config import settings
 from .core.database import get_db, AsyncSessionLocal
+from .core.session import session_manager
 from .services.user_service import UserService
 from .schemas.user import UserCreate
 from .models.organization import Organization
@@ -77,8 +78,16 @@ async def create_default_user():
 
 @app.on_event("startup")
 async def startup_event():
+    # Initialize session manager
+    await session_manager.connect()
     # Create default user on startup
     await create_default_user()
+
+
+@app.on_event("shutdown")
+async def shutdown_event():
+    # Cleanup session manager
+    await session_manager.disconnect()
 
 
 @app.get("/")
@@ -88,4 +97,49 @@ async def root():
 
 @app.get("/health")
 async def health_check():
-    return {"status": "healthy"}
+    """Comprehensive health check for zero-downtime deployment"""
+    try:
+        health_status = {
+            "status": "healthy",
+            "timestamp": asyncio.get_event_loop().time(),
+            "services": {}
+        }
+
+        # Check database connectivity
+        try:
+            async with AsyncSessionLocal() as db:
+                await db.execute("SELECT 1")
+                health_status["services"]["database"] = "healthy"
+        except Exception as e:
+            health_status["services"]["database"] = f"unhealthy: {str(e)}"
+            health_status["status"] = "degraded"
+
+        # Check Redis connectivity
+        try:
+            if session_manager.redis_client:
+                await session_manager.redis_client.ping()
+                health_status["services"]["redis"] = "healthy"
+            else:
+                health_status["services"]["redis"] = "unhealthy: not connected"
+                health_status["status"] = "degraded"
+        except Exception as e:
+            health_status["services"]["redis"] = f"unhealthy: {str(e)}"
+            health_status["status"] = "degraded"
+
+        # If any service is unhealthy, return 503
+        if health_status["status"] != "healthy":
+            raise HTTPException(status_code=503, detail=health_status)
+
+        return health_status
+
+    except HTTPException:
+        raise
+    except Exception as e:
+        raise HTTPException(
+            status_code=503,
+            detail={
+                "status": "unhealthy",
+                "error": str(e),
+                "timestamp": asyncio.get_event_loop().time()
+            }
+        )

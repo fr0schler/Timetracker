@@ -6,6 +6,7 @@ from sqlalchemy.ext.asyncio import AsyncSession
 
 from ...core.config import settings
 from ...core.database import get_db
+from ...core.security import verify_access_token, revoke_token
 from ...models.user import User
 from ...models.organization import Organization
 from ...services.user_service import UserService
@@ -24,20 +25,21 @@ async def get_current_user(
         headers={"WWW-Authenticate": "Bearer"},
     )
 
-    try:
-        payload = jwt.decode(
-            credentials.credentials, settings.secret_key, algorithms=[settings.algorithm]
-        )
-        username: str = payload.get("sub")
-        if username is None:
-            raise credentials_exception
-        token_data = TokenData(username=username)
-    except JWTError:
+    # Verify token and get session data
+    token_data = await verify_access_token(credentials.credentials)
+    if not token_data:
         raise credentials_exception
 
-    user = await UserService.get_user_by_email(db, email=token_data.username)
+    user_id = token_data["user_id"]
+    user_data = token_data["user_data"]
+
+    # Get fresh user data from database (in case user was updated)
+    user = await UserService.get_user(db, user_id=user_id)
     if user is None:
+        # Token is valid but user doesn't exist anymore - revoke the token
+        await revoke_token(credentials.credentials)
         raise credentials_exception
+
     return user
 
 
