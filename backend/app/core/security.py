@@ -53,8 +53,10 @@ async def verify_access_token(token: str) -> Optional[Dict[str, Any]]:
 
         # If no session_id or Redis unavailable, use basic JWT verification
         if not session_id or not session_manager.redis_client:
+            # For backward compatibility, user_id in old tokens is email
+            # We'll resolve the actual user_id in the deps layer
             return {
-                "user_id": int(user_id),
+                "user_id": user_id,  # Keep as string for backward compatibility
                 "session_id": session_id,
                 "user_data": {}
             }
@@ -64,12 +66,20 @@ async def verify_access_token(token: str) -> Optional[Dict[str, Any]]:
         if session_data is None:
             return None
 
-        # Verify user_id matches session
-        if session_data["user_id"] != int(user_id):
+        # For new session-based tokens, user_id should be int
+        try:
+            token_user_id = int(user_id) if isinstance(user_id, str) and user_id.isdigit() else user_id
+            session_user_id = session_data["user_id"]
+
+            # Compare appropriately
+            if session_user_id != token_user_id:
+                return None
+        except (ValueError, TypeError):
+            # If conversion fails, token is incompatible
             return None
 
         return {
-            "user_id": int(user_id),
+            "user_id": session_data["user_id"],  # Use session's user_id (int)
             "session_id": session_id,
             "user_data": session_data["user_data"]
         }

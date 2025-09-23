@@ -28,9 +28,16 @@ async def get_current_user(
     # Try new session-based verification first
     token_data = await verify_access_token(credentials.credentials)
     if token_data:
-        user_id = token_data["user_id"]
-        # Get fresh user data from database (in case user was updated)
-        user = await UserService.get_user(db, user_id=user_id)
+        user_identifier = token_data["user_id"]
+
+        # Handle both email (old tokens) and user_id (new tokens)
+        if isinstance(user_identifier, str) and "@" in user_identifier:
+            # Old token with email as subject
+            user = await UserService.get_user_by_email(db, email=user_identifier)
+        else:
+            # New token with user_id
+            user = await UserService.get_user(db, user_id=user_identifier)
+
         if user is None:
             # Token is valid but user doesn't exist anymore - revoke the token
             await revoke_token(credentials.credentials)
