@@ -1,0 +1,127 @@
+{
+  "timestamp": "2025-09-23T08:45:34.769Z",
+  "summary": {
+    "totalIssues": 14,
+    "layoutIssues": 7,
+    "accessibilityIssues": 5,
+    "responsiveIssues": 0,
+    "usabilityIssues": 2
+  },
+  "details": {
+    "layoutIssues": [
+      {
+        "type": "warning",
+        "message": "No semantic main content area found",
+        "element": "main",
+        "recommendation": "Use <main> element or role=\"main\" for better accessibility"
+      },
+      {
+        "type": "suggestion",
+        "message": "Main content area is very wide",
+        "element": "main-content",
+        "recommendation": "Consider adding max-width and centering for better readability"
+      },
+      {
+        "type": "suggestion",
+        "message": "Insufficient spacing between section 1 and 2",
+        "element": "sections",
+        "recommendation": "Add more spacing between sections for better visual separation"
+      },
+      {
+        "type": "suggestion",
+        "message": "Insufficient spacing between section 2 and 3",
+        "element": "sections",
+        "recommendation": "Add more spacing between sections for better visual separation"
+      },
+      {
+        "type": "suggestion",
+        "message": "Insufficient spacing between section 3 and 4",
+        "element": "sections",
+        "recommendation": "Add more spacing between sections for better visual separation"
+      },
+      {
+        "type": "suggestion",
+        "message": "Insufficient spacing between section 4 and 5",
+        "element": "sections",
+        "recommendation": "Add more spacing between sections for better visual separation"
+      },
+      {
+        "type": "critical",
+        "message": "Failed to load application: this.page.waitForTimeout is not a function",
+        "element": "page",
+        "recommendation": "Ensure development server is running on localhost:3000"
+      }
+    ],
+    "accessibilityIssues": [
+      {
+        "type": "warning",
+        "message": "Navigation link 1 is too small for touch targets",
+        "element": "navigation-link",
+        "recommendation": "Ensure touch targets are at least 44px x 44px"
+      },
+      {
+        "type": "warning",
+        "message": "Navigation link 2 is too small for touch targets",
+        "element": "navigation-link",
+        "recommendation": "Ensure touch targets are at least 44px x 44px"
+      },
+      {
+        "type": "warning",
+        "message": "Navigation link 3 is too small for touch targets",
+        "element": "navigation-link",
+        "recommendation": "Ensure touch targets are at least 44px x 44px"
+      },
+      {
+        "type": "warning",
+        "message": "Navigation link 4 is too small for touch targets",
+        "element": "navigation-link",
+        "recommendation": "Ensure touch targets are at least 44px x 44px"
+      },
+      {
+        "type": "warning",
+        "message": "Navigation link 5 is too small for touch targets",
+        "element": "navigation-link",
+        "recommendation": "Ensure touch targets are at least 44px x 44px"
+      }
+    ],
+    "responsiveIssues": [],
+    "usabilityIssues": [
+      {
+        "type": "suggestion",
+        "message": "No logo or brand element found in navigation",
+        "element": "navigation",
+        "recommendation": "Add a logo or brand element for better brand recognition"
+      },
+      {
+        "type": "warning",
+        "message": "Page load time is 4010ms",
+        "element": "page",
+        "recommendation": "Optimize page load time - target under 3 seconds"
+      }
+    ],
+    "performance": {
+      "Timestamp": 1254761.365904,
+      "Documents": 3,
+      "Frames": 1,
+      "JSEventListeners": 288,
+      "Nodes": 447,
+      "LayoutCount": 10,
+      "RecalcStyleCount": 11,
+      "LayoutDuration": 0.318959,
+      "RecalcStyleDuration": 0.019461,
+      "ScriptDuration": 0.114148,
+      "TaskDuration": 0.623042,
+      "JSHeapUsedSize": 15967560,
+      "JSHeapTotalSize": 23584768,
+      "timestamp": "2025-09-23T08:45:34.764Z",
+      "pageLoadTime": 4010
+    },
+    "screenshots": [
+      {
+        "name": "full-page-desktop",
+        "path": "C:\\Users\\Tim\\Desktop\\Timetracker\\frontend\\tests\\screenshots\\full-page-desktop-1758617133898.png",
+        "timestamp": "2025-09-23T08:45:34.676Z"
+      }
+    ]
+  }
+}

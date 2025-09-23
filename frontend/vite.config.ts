@@ -49,8 +49,32 @@ export default defineConfig({
       }
     })
   ],
+  build: {
+    target: 'esnext',
+    minify: 'terser',
+    terserOptions: {
+      compress: {
+        drop_console: true,
+        drop_debugger: true,
+      },
+    },
+    rollupOptions: {
+      output: {
+        manualChunks: {
+          vendor: ['react', 'react-dom', 'react-router-dom'],
+          ui: ['@heroicons/react'],
+          charts: ['recharts'],
+          utils: ['react-i18next', 'zustand'],
+        },
+      },
+    },
+    chunkSizeWarningLimit: 800,
+  },
   server: {
     host: true,
     port: 3000,
+  },
+  optimizeDeps: {
+    include: ['react', 'react-dom', 'react-router-dom'],
   },
 })

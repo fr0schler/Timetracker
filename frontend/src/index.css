@@ -51,4 +51,36 @@
   .card {
     @apply bg-white dark:bg-gray-800 rounded-lg shadow-md border border-gray-200 dark:border-gray-700;
   }
+
+  /* Section spacing for better visual separation */
+  .section {
+    @apply mb-8 last:mb-0;
+  }
+
+  .section-lg {
+    @apply mb-12 last:mb-0;
+  }
+
+  /* Touch targets for better accessibility */
+  .touch-target {
+    @apply min-h-[44px] min-w-[44px];
+  }
+
+  /* Improved content width constraints */
+  .content-container {
+    @apply max-w-6xl mx-auto;
+  }
+
+  .content-container-narrow {
+    @apply max-w-4xl mx-auto;
+  }
+
+  /* Performance optimizations */
+  .will-change-transform {
+    will-change: transform;
+  }
+
+  .will-change-opacity {
+    will-change: opacity;
+  }
 }

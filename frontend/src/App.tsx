@@ -1,32 +1,34 @@
-import { useEffect } from 'react';
+import { useEffect, Suspense, lazy } from 'react';
 import { Routes, Route, Navigate, useLocation } from 'react-router-dom';
 import { useAuthStore } from './store/authStore';
 import { useTimeEntryStore } from './store/timeEntryStore';
 import { useToastStore } from './store/toastStore';
 import { useKeyboardShortcuts } from './hooks/useKeyboardShortcuts';
-import LandingPage from './pages/LandingPage';
-import LoginPage from './pages/LoginPage';
-import RegisterPage from './pages/RegisterPage';
-import DashboardPage from './pages/DashboardPage';
-import ProjectsPage from './pages/ProjectsPage';
-import TimeEntriesPage from './pages/TimeEntriesPage';
-import TasksPage from './pages/TasksPage';
-import TaskTemplatesPage from './pages/TaskTemplatesPage';
-import TeamManagementPage from './pages/TeamManagementPage';
-import UserProfilePage from './pages/UserProfilePage';
-import SettingsPage from './pages/SettingsPage';
-import OrganizationSettingsPage from './pages/OrganizationSettingsPage';
-import AnalyticsPage from './pages/AnalyticsPage';
-import ReportsPage from './pages/ReportsPage';
-import ProjectTemplatesPage from './pages/ProjectTemplatesPage';
-import APIKeysPage from './pages/APIKeysPage';
-import AdvancedDashboardPage from './pages/AdvancedDashboardPage';
-import ExportPage from './pages/ExportPage';
 import EnhancedLayout from './components/Layout/EnhancedLayout';
 import ProtectedRoute from './components/ProtectedRoute';
 import TimerDescriptionDialog from './components/TimerDescriptionDialog';
 import ToastContainer from './components/ToastContainer';
 import ThemeProvider from './providers/ThemeProvider';
+
+// Lazy load pages for better performance
+const LandingPage = lazy(() => import('./pages/LandingPage'));
+const LoginPage = lazy(() => import('./pages/LoginPage'));
+const RegisterPage = lazy(() => import('./pages/RegisterPage'));
+const DashboardPage = lazy(() => import('./pages/DashboardPage'));
+const ProjectsPage = lazy(() => import('./pages/ProjectsPage'));
+const TimeEntriesPage = lazy(() => import('./pages/TimeEntriesPage'));
+const TasksPage = lazy(() => import('./pages/TasksPage'));
+const TaskTemplatesPage = lazy(() => import('./pages/TaskTemplatesPage'));
+const TeamManagementPage = lazy(() => import('./pages/TeamManagementPage'));
+const UserProfilePage = lazy(() => import('./pages/UserProfilePage'));
+const SettingsPage = lazy(() => import('./pages/SettingsPage'));
+const OrganizationSettingsPage = lazy(() => import('./pages/OrganizationSettingsPage'));
+const AnalyticsPage = lazy(() => import('./pages/AnalyticsPage'));
+const ReportsPage = lazy(() => import('./pages/ReportsPage'));
+const ProjectTemplatesPage = lazy(() => import('./pages/ProjectTemplatesPage'));
+const APIKeysPage = lazy(() => import('./pages/APIKeysPage'));
+const AdvancedDashboardPage = lazy(() => import('./pages/AdvancedDashboardPage'));
+const ExportPage = lazy(() => import('./pages/ExportPage'));
 
 function App() {
   const { loadUser, isAuthenticated, isLoading } = useAuthStore();
@@ -54,12 +56,15 @@ function App() {
     }
   }, []);
 
+  // Loading spinner component
+  const LoadingSpinner = () => (
+    <div className="min-h-screen flex items-center justify-center">
+      <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary-600"></div>
+    </div>
+  );
+
   if (isLoading) {
-    return (
-      <div className="min-h-screen flex items-center justify-center">
-        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary-600"></div>
-      </div>
-    );
+    return <LoadingSpinner />;
   }
 
   // Show landing page for non-authenticated users on root path
@@ -67,11 +72,12 @@ function App() {
 
   return (
     <ThemeProvider>
-      <Routes>
-        {/* Public Routes */}
-        <Route path="/" element={showLandingPage ? <LandingPage /> : <Navigate to="/dashboard" replace />} />
-        <Route path="/login" element={<LoginPage />} />
-        <Route path="/register" element={<RegisterPage />} />
+      <Suspense fallback={<LoadingSpinner />}>
+        <Routes>
+          {/* Public Routes */}
+          <Route path="/" element={showLandingPage ? <LandingPage /> : <Navigate to="/dashboard" replace />} />
+          <Route path="/login" element={<LoginPage />} />
+          <Route path="/register" element={<RegisterPage />} />
 
         {/* Protected Routes */}
         <Route
@@ -239,12 +245,13 @@ function App() {
           <Route index element={<ExportPage />} />
         </Route>
 
-        {/* Catch all route */}
-        <Route
-          path="*"
-          element={<Navigate to={isAuthenticated ? "/dashboard" : "/"} replace />}
-        />
-      </Routes>
+          {/* Catch all route */}
+          <Route
+            path="*"
+            element={<Navigate to={isAuthenticated ? "/dashboard" : "/"} replace />}
+          />
+        </Routes>
+      </Suspense>
 
       {/* Global Components */}
 
