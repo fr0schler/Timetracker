@@ -8,6 +8,12 @@ class Settings(BaseSettings):
     algorithm: str = Field(default="HS256", env="ALGORITHM")
     access_token_expire_minutes: int = Field(default=30, env="ACCESS_TOKEN_EXPIRE_MINUTES")
 
+    # Redis settings for caching
+    redis_url: str = Field(default="redis://localhost:6379", env="REDIS_URL")
+
+    # WebSocket settings
+    websocket_enabled: bool = Field(default=True, env="WEBSOCKET_ENABLED")
+
     class Config:
         env_file = ".env"
 
