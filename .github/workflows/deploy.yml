@@ -125,7 +125,7 @@ jobs:
           POSTGRES_PASSWORD=postgres
 
           # Backend Configuration
-          SECRET_KEY=your-very-secure-secret-key-change-this-in-production
+          SECRET_KEY=${{ secrets.SECRET_KEY }}
           ACCESS_TOKEN_EXPIRE_MINUTES=1440
           SESSION_EXPIRE_SECONDS=86400
 
