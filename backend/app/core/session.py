@@ -2,7 +2,14 @@ import json
 import uuid
 from datetime import datetime, timedelta
 from typing import Optional, Dict, Any
-import redis.asyncio as redis
+
+try:
+    import redis.asyncio as redis
+    REDIS_AVAILABLE = True
+except ImportError:
+    REDIS_AVAILABLE = False
+    redis = None
+
 from .config import settings
 
 
@@ -12,6 +19,10 @@ class SessionManager:
 
     async def connect(self):
         """Connect to Redis for session storage"""
+        if not REDIS_AVAILABLE:
+            print("⚠️ Redis not available, session persistence disabled")
+            return
+
         try:
             self.redis_client = redis.from_url(
                 settings.redis_url,

@@ -25,21 +25,33 @@ async def get_current_user(
         headers={"WWW-Authenticate": "Bearer"},
     )
 
-    # Verify token and get session data
+    # Try new session-based verification first
     token_data = await verify_access_token(credentials.credentials)
-    if not token_data:
+    if token_data:
+        user_id = token_data["user_id"]
+        # Get fresh user data from database (in case user was updated)
+        user = await UserService.get_user(db, user_id=user_id)
+        if user is None:
+            # Token is valid but user doesn't exist anymore - revoke the token
+            await revoke_token(credentials.credentials)
+            raise credentials_exception
+        return user
+
+    # Fallback to old JWT verification (for backward compatibility)
+    try:
+        payload = jwt.decode(
+            credentials.credentials, settings.secret_key, algorithms=[settings.algorithm]
+        )
+        username: str = payload.get("sub")
+        if username is None:
+            raise credentials_exception
+        token_data = TokenData(username=username)
+    except JWTError:
         raise credentials_exception
 
-    user_id = token_data["user_id"]
-    user_data = token_data["user_data"]
-
-    # Get fresh user data from database (in case user was updated)
-    user = await UserService.get_user(db, user_id=user_id)
+    user = await UserService.get_user_by_email(db, email=token_data.username)
     if user is None:
-        # Token is valid but user doesn't exist anymore - revoke the token
-        await revoke_token(credentials.credentials)
         raise credentials_exception
-
     return user
 
 

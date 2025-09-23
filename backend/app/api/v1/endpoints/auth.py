@@ -44,7 +44,7 @@ async def login_for_access_token(
             headers={"WWW-Authenticate": "Bearer"},
         )
 
-    # Prepare user data for session
+    # Prepare user data for session (if Redis is available)
     user_data = {
         "id": user.id,
         "email": user.email,
@@ -54,7 +54,7 @@ async def login_for_access_token(
 
     access_token_expires = timedelta(minutes=settings.access_token_expire_minutes)
     access_token = await create_access_token(
-        subject=user.id, user_data=user_data, expires_delta=access_token_expires
+        subject=user.email, user_data=user_data, expires_delta=access_token_expires
     )
     return {"access_token": access_token, "token_type": "bearer"}
 
