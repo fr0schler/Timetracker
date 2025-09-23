@@ -31,6 +31,7 @@ frontend/vite.config.js.timestamp-*
 frontend/vite.config.ts.timestamp-*
 
 # Puppeteer test files
+frontend/tests
 frontend/screenshots/
 frontend/test-screenshots/
 frontend/*test*.js

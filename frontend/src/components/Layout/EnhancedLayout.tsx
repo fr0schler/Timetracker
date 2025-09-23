@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { Outlet, Link, useLocation } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import {
@@ -16,7 +16,9 @@ import {
   Download,
   Key,
   Menu,
-  Search
+  Search,
+  MoreHorizontal,
+  ChevronDown
 } from 'lucide-react';
 import { useAuthStore } from '../../store/authStore';
 import MobileNavigation from '../Navigation/MobileNavigation';
@@ -29,18 +31,37 @@ const EnhancedLayout: React.FC = () => {
   const { user, logout } = useAuthStore();
   const location = useLocation();
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const [isMoreMenuOpen, setIsMoreMenuOpen] = useState(false);
+  const moreMenuRef = useRef<HTMLDivElement>(null);
 
-  const navigation = [
+  // Close dropdown when clicking outside
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (moreMenuRef.current && !moreMenuRef.current.contains(event.target as Node)) {
+        setIsMoreMenuOpen(false);
+      }
+    };
+
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => document.removeEventListener('mousedown', handleClickOutside);
+  }, []);
+
+  // Primary navigation - most important items for desktop navbar
+  const primaryNavigation = [
     { name: t('navigation.dashboard'), href: '/dashboard', icon: Clock },
-    { name: 'Advanced Dashboard', href: '/advanced-dashboard', icon: BarChart3 },
     { name: t('navigation.projects'), href: '/projects', icon: FolderOpen },
     { name: t('navigation.tasks'), href: '/tasks', icon: CheckSquare },
-    { name: 'Templates', href: '/task-templates', icon: FileText },
+    { name: t('navigation.timeEntries'), href: '/time-entries', icon: List },
     { name: t('navigation.team'), href: '/team', icon: Users },
+  ];
+
+  // Secondary navigation - accessible via dropdown or secondary menu
+  const secondaryNavigation = [
+    { name: 'Advanced Dashboard', href: '/advanced-dashboard', icon: BarChart3 },
+    { name: 'Templates', href: '/task-templates', icon: FileText },
     { name: 'Analytics', href: '/analytics', icon: BarChart3 },
     { name: t('navigation.reports'), href: '/reports', icon: Download },
     { name: 'Export', href: '/export', icon: Download },
-    { name: t('navigation.timeEntries'), href: '/time-entries', icon: List },
   ];
 
   const isActive = (href: string) => {
@@ -82,14 +103,14 @@ const EnhancedLayout: React.FC = () => {
               </Link>
 
               {/* Desktop Navigation */}
-              <div className="hidden sm:ml-6 sm:flex sm:space-x-8">
-                {navigation.map((item) => {
+              <div className="hidden sm:ml-6 sm:flex sm:items-center sm:space-x-4">
+                {primaryNavigation.map((item) => {
                   const Icon = item.icon;
                   return (
                     <Link
                       key={item.name}
                       to={item.href}
-                      className={`inline-flex items-center px-3 py-3 border-b-2 text-sm font-medium transition-colors min-h-[44px] ${
+                      className={`inline-flex items-center px-3 py-2 border-b-2 text-sm font-medium transition-colors min-h-[44px] ${
                         isActive(item.href)
                           ? 'border-primary-500 text-gray-900 dark:text-white'
                           : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300 dark:text-gray-400 dark:hover:text-gray-300'
@@ -100,6 +121,48 @@ const EnhancedLayout: React.FC = () => {
                     </Link>
                   );
                 })}
+
+                {/* More Menu Dropdown */}
+                <div className="relative" ref={moreMenuRef}>
+                  <button
+                    onClick={() => setIsMoreMenuOpen(!isMoreMenuOpen)}
+                    className={`inline-flex items-center px-3 py-2 border-b-2 text-sm font-medium transition-colors min-h-[44px] ${
+                      secondaryNavigation.some(item => isActive(item.href))
+                        ? 'border-primary-500 text-gray-900 dark:text-white'
+                        : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300 dark:text-gray-400 dark:hover:text-gray-300'
+                    }`}
+                  >
+                    <MoreHorizontal className="h-4 w-4 mr-2" />
+                    More
+                    <ChevronDown className={`h-3 w-3 ml-1 transition-transform ${isMoreMenuOpen ? 'rotate-180' : ''}`} />
+                  </button>
+
+                  {/* Dropdown Menu */}
+                  {isMoreMenuOpen && (
+                    <div className="absolute top-full left-0 mt-1 w-56 bg-white dark:bg-gray-800 rounded-md shadow-lg border border-gray-200 dark:border-gray-700 z-50">
+                      <div className="py-1">
+                        {secondaryNavigation.map((item) => {
+                          const Icon = item.icon;
+                          return (
+                            <Link
+                              key={item.name}
+                              to={item.href}
+                              onClick={() => setIsMoreMenuOpen(false)}
+                              className={`flex items-center px-4 py-3 text-sm transition-colors min-h-[44px] ${
+                                isActive(item.href)
+                                  ? 'bg-primary-50 text-primary-600 dark:bg-primary-900 dark:text-primary-300'
+                                  : 'text-gray-700 hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-gray-700'
+                              }`}
+                            >
+                              <Icon className="h-4 w-4 mr-3" />
+                              {item.name}
+                            </Link>
+                          );
+                        })}
+                      </div>
+                    </div>
+                  )}
+                </div>
               </div>
             </div>
 
