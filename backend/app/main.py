@@ -115,17 +115,17 @@ async def health_check():
             health_status["services"]["database"] = f"unhealthy: {str(e)}"
             health_status["status"] = "degraded"
 
-        # Check Redis connectivity
+        # Check Redis connectivity (optional)
         try:
             if session_manager.redis_client:
                 await session_manager.redis_client.ping()
                 health_status["services"]["redis"] = "healthy"
             else:
-                health_status["services"]["redis"] = "unhealthy: not connected"
-                health_status["status"] = "degraded"
+                health_status["services"]["redis"] = "disabled: redis package not available"
+                # Don't mark as degraded if Redis is intentionally disabled
         except Exception as e:
             health_status["services"]["redis"] = f"unhealthy: {str(e)}"
-            health_status["status"] = "degraded"
+            # Don't mark as degraded if Redis is optional
 
         # If any service is unhealthy, return 503
         if health_status["status"] != "healthy":

@@ -29,9 +29,12 @@ async def create_access_token(
 
     # Try to create session in Redis if available
     if user_data and session_manager.redis_client:
-        session_id = await session_manager.create_session(int(subject), user_data)
-        if session_id:
-            to_encode["session_id"] = session_id
+        # Extract user_id from user_data, not from subject (which might be email)
+        user_id = user_data.get("id")
+        if user_id:
+            session_id = await session_manager.create_session(user_id, user_data)
+            if session_id:
+                to_encode["session_id"] = session_id
 
     encoded_jwt = jwt.encode(to_encode, settings.secret_key, algorithm=settings.algorithm)
     return encoded_jwt
